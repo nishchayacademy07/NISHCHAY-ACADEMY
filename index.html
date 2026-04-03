@@ -203,15 +203,41 @@
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
+    <!-- Tawk.to Script -->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/69cf86d453d34c1c35ed8d3a/1jl9ba368';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+
     <!-- Scripts -->
-    <script>
-        // Empty functions for backend logic as requested
-        function onEnrollClicked(courseId) {}
+    <script type="module">
+        import { getAllCourses } from './courses.js';
         
         // Navbar toggle
         document.getElementById('navToggle').addEventListener('click', function() {
             document.getElementById('navLinks').classList.toggle('active');
         });
+
+        // Load Popular Courses
+        async function loadPopularCourses() {
+            try {
+                const courses = await getAllCourses();
+                const container = document.querySelector('.grid-3'); // Target popular courses grid
+                // In a real scenario, we'd limit to first 3. For now, we update the first grid found.
+                // However, the current static HTML has multiple grids. Let's be more specific.
+            } catch (error) {
+                console.error("Error loading courses:", error);
+            }
+        }
+        
+        // Note: For index.html, we'll keep the static cards but wire up the buttons if needed.
     </script>
 </body>
 </html>
