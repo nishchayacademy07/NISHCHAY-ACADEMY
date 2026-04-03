@@ -1,5 +1,5 @@
 // ============================================================
-// courses.js - Course Management Logic
+// courses.js - Course Management Logic (FIXED)
 // Nishchay Academy
 // ============================================================
 
@@ -12,7 +12,7 @@ export async function getAllCourses() {
     .select('*')
     .order('created_at', { ascending: false });
   if (error) throw error;
-  return data;
+  return data || [];
 }
 
 // Get single course by ID
@@ -26,11 +26,21 @@ export async function getCourseById(id) {
   return data;
 }
 
-// Add new course (admin only)
+// Add new course (admin only) — Bug #21 fix: parse price to number
 export async function addCourse(courseData) {
+  const cleaned = {
+    title: (courseData.title || '').trim(),
+    subject: (courseData.subject || '').trim(),
+    description: (courseData.description || '').trim(),
+    price: parseFloat(courseData.price) || 0,
+    image_url: courseData.image_url || ''
+  };
+  if (!cleaned.title) throw new Error('Course title is required.');
+  if (!cleaned.subject) throw new Error('Course category is required.');
+
   const { data, error } = await supabase
     .from('courses')
-    .insert(courseData)
+    .insert(cleaned)
     .select()
     .single();
   if (error) throw error;
@@ -59,14 +69,15 @@ export async function deleteCourse(id) {
   return true;
 }
 
-// Filter courses by subject
+// Bug #2 fix: filterBySubject now uses case-insensitive matching
+// Filter values from buttons use exact DB values now (matched in HTML)
 export async function filterBySubject(subject) {
   if (!subject || subject === 'all') return getAllCourses();
   const { data, error } = await supabase
     .from('courses')
     .select('*')
-    .eq('subject', subject)
+    .ilike('subject', subject)
     .order('created_at', { ascending: false });
   if (error) throw error;
-  return data;
+  return data || [];
 }
