@@ -146,10 +146,10 @@
         </div>
         <div class="user-menu" onclick="toggleProfileMenu()">
             <div style="text-align: right; display: none; @media(min-width: 576px){display: block;}">
-                <p style="margin: 0; font-weight: 500; color: var(--text-dark); font-size: 0.9rem;">Student User</p>
+                <p id="dashboardUserName" style="margin: 0; font-weight: 500; color: var(--text-dark); font-size: 0.9rem;">Student User</p>
                 <small style="color: var(--text-light);">Class 12th</small>
             </div>
-            <div class="user-avatar">SU</div>
+            <div id="dashboardAvatar" class="user-avatar">SU</div>
             <i class="fa-solid fa-chevron-down" style="color: var(--text-light); font-size: 0.8rem;"></i>
         </div>
     </div>
@@ -194,21 +194,21 @@
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fa-solid fa-book"></i></div>
                     <div class="stat-info">
-                        <h3>3</h3>
+                        <h3 id="statEnrolled">0</h3>
                         <p>Enrolled Courses</p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon" style="background: #e6f9ea; color: #28a745;"><i class="fa-solid fa-check-circle"></i></div>
                     <div class="stat-info">
-                        <h3>12</h3>
+                        <h3 id="statCompleted">0</h3>
                         <p>Completed Lessons</p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon" style="background: #fff3cd; color: #ffc107;"><i class="fa-solid fa-clock"></i></div>
                     <div class="stat-info">
-                        <h3>24h</h3>
+                        <h3 id="statHours">0h</h3>
                         <p>Hours Studied</p>
                     </div>
                 </div>
@@ -218,34 +218,9 @@
             <div style="margin-top: 40px;">
                 <h3 style="color: var(--text-dark); margin-bottom: 20px;">Continue Learning</h3>
                 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                    
-                    <div class="course-progress-card">
-                        <div class="course-header">
-                            <h4>Advanced Mathematics Mastery</h4>
-                            <span class="course-badge" style="margin: 0; background-color: #28a745;">In Progress</span>
-                        </div>
-                        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">Next: Chapter 5 - Integration Techniques</p>
-                        <div class="progress-container">
-                            <div class="progress-bar" style="width: 45%;"></div>
-                        </div>
-                        <div class="progress-text">45% Completed</div>
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 15px; padding: 8px;">Resume Course</button>
-                    </div>
-
-                    <div class="course-progress-card">
-                        <div class="course-header">
-                            <h4>Complete Science Foundation</h4>
-                            <span class="course-badge" style="margin: 0; background-color: #ffc107; color: #000;">Just Started</span>
-                        </div>
-                        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">Next: Chapter 1 - Motion</p>
-                        <div class="progress-container">
-                            <div class="progress-bar" style="width: 10%;"></div>
-                        </div>
-                        <div class="progress-text">10% Completed</div>
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 15px; padding: 8px;">Resume Course</button>
-                    </div>
-
+                <div id="enrolledCoursesContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <!-- Dynamically loaded -->
+                    <p style="color: var(--text-light);">Loading your courses...</p>
                 </div>
             </div>
 
@@ -276,39 +251,52 @@
         </div>
     </div>
 
+    <!-- Tawk.to Script -->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/69cf86d453d34c1c35ed8d3a/1jl9ba368';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+
     <!-- Scripts -->
-    <script>
-        function toggleSidebar() {
+    <script type="module">
+        import { loadStudentDashboard } from './dashboard.js';
+        
+        // Initialize dashboard
+        loadStudentDashboard();
+
+        window.toggleSidebar = function() {
             document.getElementById('sidebar').classList.toggle('active');
-        }
+        };
 
-        function toggleProfileMenu() {
-            // Mock empty dropdown toggle
+        window.toggleProfileMenu = function() {
             console.log("Profile menu toggled");
-        }
+        };
 
-        function switchSection(sectionParams) {
-            // Remove active classes
+        window.switchSection = function(sectionParams) {
             document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            if (event && event.currentTarget) event.currentTarget.classList.add('active');
 
             if(sectionParams === 'profile') {
-                // Show profile form, hide cards
                 document.querySelectorAll('.stat-card').forEach(el => el.style.display = 'none');
-                document.querySelectorAll('.course-progress-card').forEach(el => el.style.display = 'none');
+                document.getElementById('enrolledCoursesContainer').parentElement.style.display = 'none';
                 document.getElementById('profileSection').style.display = 'block';
             } else {
-                // Reset dashboard view
                 document.querySelectorAll('.stat-card').forEach(el => el.style.display = 'flex');
-                document.querySelectorAll('.course-progress-card').forEach(el => el.style.display = 'block');
+                document.getElementById('enrolledCoursesContainer').parentElement.style.display = 'block';
                 document.getElementById('profileSection').style.display = 'none';
             }
             
-            // On mobile, close sidebar after click
             if(window.innerWidth <= 768) {
                 document.getElementById('sidebar').classList.remove('active');
             }
-        }
+        };
     </script>
 </body>
 </html>
