@@ -61,3 +61,17 @@ export async function getDashboardStats() {
     totalEnrollments: enrollmentsRes.count || 0
   };
 }
+
+// Update user details (admin only)
+export async function updateUser(id, userData) {
+  const { data, error } = await supabase
+    .from('users')
+    .update(userData)
+    .eq('id', id)
+    .select()
+    .single();
+    
+  if (error) throw error;
+  return data;
+}
+
