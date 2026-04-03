@@ -35,11 +35,19 @@ export async function signUp(name, email, password) {
 
   // Bug #3 fix: Check for insert error and throw if it fails
   if (data.user) {
+    // AUTOMATION: Check if this is the first user ever
+    const { count, error: countError } = await supabase
+      .from('users')
+      .select('*', { count: 'exact', head: true });
+    
+    // Default to student, but if it's the first user (count 0), make them admin
+    const role = (count === 0 && !countError) ? 'admin' : 'student';
+
     const { error: insertError } = await supabase.from('users').insert({
       id: data.user.id,
       name: name.trim(),
       email,
-      role: 'student'
+      role: role
     });
     if (insertError) {
       console.error('Failed to create user profile:', insertError);
