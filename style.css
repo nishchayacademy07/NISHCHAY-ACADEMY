@@ -58,6 +58,11 @@ ul {
   padding: 0 20px;
 }
 
+/* Bug #19 fix: .text-center was used but never defined */
+.text-center {
+  text-align: center;
+}
+
 /* Navbar */
 .navbar {
   background-color: var(--white);
@@ -113,6 +118,8 @@ ul {
   padding: 10px 24px;
   border-radius: var(--radius-md);
   font-weight: 500;
+  font-family: inherit;
+  font-size: inherit;
   cursor: pointer;
   border: none;
   transition: var(--transition);
@@ -130,6 +137,12 @@ ul {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
   color: var(--white);
+}
+
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .btn-outline {
@@ -173,6 +186,7 @@ ul {
   display: flex;
   gap: 15px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 /* Shared Sections */
@@ -322,6 +336,7 @@ ul {
   border: 1px solid #ced4da;
   border-radius: var(--radius-md);
   font-family: inherit;
+  font-size: inherit;
   transition: var(--transition);
 }
 
@@ -380,7 +395,7 @@ textarea.form-control {
 .whatsapp-btn {
   position: fixed;
   bottom: 30px;
-  right: 30px;
+  left: 30px;
   background-color: #25d366;
   color: white;
   width: 60px;
@@ -416,7 +431,19 @@ textarea.form-control {
   to { opacity: 1; }
 }
 
+/* Bug #10 fix: proper class for showing user info on desktop */
+.user-info-desktop {
+  text-align: right;
+  display: none;
+}
+
 /* Responsive Breakpoints */
+@media (min-width: 576px) {
+  .user-info-desktop {
+    display: block;
+  }
+}
+
 @media (max-width: 768px) {
   .nav-links {
     display: none;
@@ -446,6 +473,10 @@ textarea.form-control {
   .section {
     padding: 50px 0;
   }
+
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Dashboard / Admin specific */
@@ -460,6 +491,7 @@ textarea.form-control {
   border-right: 1px solid rgba(0,0,0,0.05);
   padding: 20px 0;
   transition: var(--transition);
+  flex-shrink: 0;
 }
 
 .sidebar-link {
@@ -482,6 +514,7 @@ textarea.form-control {
   flex: 1;
   padding: 30px;
   overflow-y: auto;
+  min-width: 0;
 }
 
 /* Tables */
@@ -547,4 +580,22 @@ textarea.form-control {
   height: 100%;
   background-color: var(--primary-color);
   border-radius: var(--radius-sm);
+  transition: width 0.5s ease;
 }
+
+/* Toast notifications */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  padding: 15px 25px;
+  border-radius: var(--radius-md);
+  color: white;
+  font-weight: 500;
+  z-index: 9999;
+  animation: slideInUp 0.3s ease;
+  box-shadow: var(--shadow-lg);
+}
+
+.toast-success { background: #28a745; }
+.toast-error { background: #dc3545; }
