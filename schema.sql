@@ -2,6 +2,12 @@
 -- NISHCHAY ACADEMY - COMPLETE DATABASE SCHEMA (CMS READY)
 -- ============================================================
 
+-- CLEAN SLATE (Drops old versions if they exist to prevent errors)
+DROP TABLE IF EXISTS public.site_settings CASCADE;
+DROP TABLE IF EXISTS public.enrollments CASCADE;
+DROP TABLE IF EXISTS public.courses CASCADE;
+DROP TABLE IF EXISTS public.users CASCADE;
+
 -- 1. USERS TABLE
 CREATE TABLE IF NOT EXISTS public.users (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
