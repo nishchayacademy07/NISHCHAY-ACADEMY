@@ -199,13 +199,29 @@
 
     </div>
 
+    <!-- Tawk.to Script -->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/69cf86d453d34c1c35ed8d3a/1jl9ba368';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+
     <!-- Scripts -->
-    <script>
+    <script type="module">
+        import { login, signUp } from './auth.js';
+
         // Tab Switcher
-        function switchTab(tabId) {
+        window.switchTab = function(tabId) {
             // Update Tab UI
             document.querySelectorAll('.auth-tab').forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
+            const activeTab = Array.from(document.querySelectorAll('.auth-tab')).find(t => t.innerText.toLowerCase().includes(tabId));
+            if (activeTab) activeTab.classList.add('active');
             
             // Toggle Forms
             document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
@@ -218,32 +234,56 @@
                 document.querySelector('.auth-header h2').innerText = 'Create Account';
                 document.querySelector('.auth-header p').innerText = 'Start your learning journey with us.';
             }
-        }
+        };
 
-        // Empty backend functions
-        function handleLogin(e) {
+        // Real Auth functions
+        window.handleLogin = async function(e) {
             e.preventDefault();
-            console.log("Login logic here");
-            // Mock direct to dashboard
-            window.location.href = "dashboard.html";
-        }
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPassword').value;
+            const btn = e.target.querySelector('button');
+            
+            try {
+                btn.disabled = true;
+                btn.innerText = 'Signing in...';
+                await login(email, pass);
+                window.location.href = "dashboard.html";
+            } catch (err) {
+                alert("Login Error: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Sign In';
+            }
+        };
 
-        function handleSignup(e) {
+        window.handleSignup = async function(e) {
             e.preventDefault();
-            console.log("Signup logic here");
-            // Mock direct to dashboard
-            window.location.href = "dashboard.html";
-        }
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const pass = document.getElementById('signupPassword').value;
+            const btn = e.target.querySelector('button');
+            
+            try {
+                btn.disabled = true;
+                btn.innerText = 'Creating account...';
+                await signUp(name, email, pass);
+                alert("Account created! Redirecting to dashboard...");
+                window.location.href = "dashboard.html";
+            } catch (err) {
+                alert("Signup Error: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Create Account';
+            }
+        };
 
-        function handleForgot() {
-            console.log("Forgot password logic here");
-            alert("Forgot Password functionality will be available via backend.");
-        }
+        window.handleForgot = function() {
+            alert("Please contact support or check your email for password recovery.");
+        };
 
-        function handleGoogle() {
-            console.log("Google Auth logic here");
-            alert("Google Sign in requires backend setup.");
-        }
+        window.handleGoogle = function() {
+            alert("Google login placeholder. Requires Supabase project configuration.");
+        };
     </script>
 </body>
 </html>
