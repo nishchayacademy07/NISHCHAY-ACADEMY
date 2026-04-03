@@ -35,10 +35,8 @@ export async function signUp(name, email, password) {
 
   // Bug #3 fix: Check for insert error and throw if it fails
   if (data.user) {
-    // AUTOMATION: Check if this is the first user ever
-    const { count, error: countError } = await supabase
-      .from('users')
-      .select('*', { count: 'exact', head: true });
+    // AUTOMATION: Check if this is the first user ever using RPC (bypasses RLS limits)
+    const { data: count, error: countError } = await supabase.rpc('get_user_count');
     
     // Default to student, but if it's the first user (count 0), make them admin
     const role = (count === 0 && !countError) ? 'admin' : 'student';
