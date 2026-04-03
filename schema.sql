@@ -62,7 +62,7 @@ ALTER TABLE public.courses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.enrollments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
 
--- USERS POLICIES
+-- USERS POLICIES (Fixed: no recursive self-reference)
 DO $$ BEGIN
     DROP POLICY IF EXISTS "Users can view their own profile" ON public.users;
     CREATE POLICY "Users can view their own profile" ON public.users FOR SELECT USING (auth.uid() = id);
@@ -71,10 +71,15 @@ DO $$ BEGIN
     CREATE POLICY "Users can update their own profile" ON public.users FOR UPDATE USING (auth.uid() = id);
     
     DROP POLICY IF EXISTS "Admins can view all users" ON public.users;
-    CREATE POLICY "Admins can view all users" ON public.users FOR SELECT USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+    -- FIX: Use auth.jwt() instead of querying public.users to avoid infinite recursion
+    CREATE POLICY "Admins can view all users" ON public.users FOR SELECT
+      USING ((auth.jwt() ->> 'role') = 'admin' OR auth.uid() = id);
     
     DROP POLICY IF EXISTS "Users can insert their own profile" ON public.users;
     CREATE POLICY "Users can insert their own profile" ON public.users FOR INSERT WITH CHECK (auth.uid() = id);
+    
+    DROP POLICY IF EXISTS "Admins can manage users" ON public.users;
+    CREATE POLICY "Admins can manage users" ON public.users FOR ALL USING ((auth.jwt() ->> 'role') = 'admin');
 END $$;
 
 -- COURSES POLICIES
@@ -83,7 +88,9 @@ DO $$ BEGIN
     CREATE POLICY "Anyone can view courses" ON public.courses FOR SELECT TO public USING (true);
     
     DROP POLICY IF EXISTS "Admins can manage courses" ON public.courses;
-    CREATE POLICY "Admins can manage courses" ON public.courses FOR ALL USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+    -- FIX: Use direct role column lookup (no recursion since it's a different table)
+    CREATE POLICY "Admins can manage courses" ON public.courses FOR ALL
+      USING (EXISTS (SELECT 1 FROM public.users u WHERE u.id = auth.uid() AND u.role = 'admin'));
 END $$;
 
 -- ENROLLMENTS POLICIES
