@@ -1,15 +1,16 @@
 // ============================================================
-// dashboard.js - Student Dashboard Logic
+// dashboard.js - Student Dashboard Logic (FIXED)
 // Nishchay Academy
 // ============================================================
 
 import { supabase } from './supabase.js';
-import { redirectIfNotLoggedIn } from './auth.js';
+import { redirectIfNotLoggedIn, logout, sanitize } from './auth.js';
 import { getEnrolledCourses } from './enrollment.js';
 
 // Load student dashboard (call this on dashboard.html page)
 export async function loadStudentDashboard() {
   const session = await redirectIfNotLoggedIn();
+  if (!session) return;
   const userId = session.user.id;
 
   // Load user profile
@@ -19,22 +20,41 @@ export async function loadStudentDashboard() {
     .eq('id', userId)
     .single();
 
-  // Update name in UI
+  // Bug #12 fix: Update welcome message with real name
   if (profile) {
+    const safeName = sanitize(profile.name || 'Student');
+
     const el = document.getElementById('dashboardUserName');
-    if (el) el.innerText = profile.name || 'Student';
+    if (el) el.innerText = safeName;
 
     const avatarEl = document.getElementById('dashboardAvatar');
     if (avatarEl) avatarEl.innerText = (profile.name || 'S').charAt(0).toUpperCase();
+
+    // Bug #12: Update the welcome header
+    const welcomeEl = document.getElementById('welcomeMessage');
+    if (welcomeEl) welcomeEl.innerText = `Welcome back, ${safeName}! 👋`;
+
+    // Bug #22 fix: Populate profile form with real data
+    const profileName = document.getElementById('profileName');
+    const profileEmail = document.getElementById('profileEmail');
+    if (profileName) profileName.value = profile.name || '';
+    if (profileEmail) profileEmail.value = profile.email || '';
   }
 
-  await showEnrolledCourses(userId);
-  await showProgress(userId);
+  // Bug #13 fix: fetch enrolled courses once and reuse
+  let enrollments = [];
+  try {
+    enrollments = await getEnrolledCourses(userId);
+  } catch (err) {
+    console.error('Failed to load enrollments:', err);
+  }
+
+  showEnrolledCourses(enrollments);
+  showProgress(enrollments);
 }
 
 // Render enrolled courses list in dashboard
-export async function showEnrolledCourses(userId) {
-  const enrollments = await getEnrolledCourses(userId);
+function showEnrolledCourses(enrollments) {
   const container = document.getElementById('enrolledCoursesContainer');
   if (!container) return;
 
@@ -50,29 +70,30 @@ export async function showEnrolledCourses(userId) {
 
   container.innerHTML = enrollments.map(e => {
     const course = e.courses;
+    if (!course) return '';
     const progress = e.progress || 0;
+    // Bug #8 fix: sanitize all user/db data before rendering
+    const safeTitle = sanitize(course.title);
+    const safeSubject = sanitize(course.subject);
     return `
       <div class="course-progress-card">
         <div class="course-header">
-          <h4>${course.title}</h4>
+          <h4>${safeTitle}</h4>
           <span class="course-badge" style="margin: 0; background: ${progress >= 100 ? '#28a745' : '#ffc107'}; color: ${progress >= 100 ? '#fff' : '#000'};">
             ${progress >= 100 ? 'Completed' : 'In Progress'}
           </span>
         </div>
-        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">Subject: ${course.subject}</p>
+        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">Subject: ${safeSubject}</p>
         <div class="progress-container">
-          <div class="progress-bar" style="width: ${progress}%;"></div>
+          <div class="progress-bar" style="width: ${Math.min(progress, 100)}%;"></div>
         </div>
         <div class="progress-text">${progress}% Completed</div>
-        <button class="btn btn-primary" style="width: 100%; margin-top: 15px; padding: 8px;" onclick="resumeCourse('${course.id}')">Resume Course</button>
       </div>`;
   }).join('');
 }
 
-// Display progress stats at top of dashboard
-export async function showProgress(userId) {
-  const enrollments = await getEnrolledCourses(userId);
-
+// Display progress stats at top of dashboard — Bug #13 fix: accept data instead of re-fetching
+function showProgress(enrollments) {
   const totalEnrolled = enrollments ? enrollments.length : 0;
   const completed = enrollments ? enrollments.filter(e => e.progress >= 100).length : 0;
   const totalHours = totalEnrolled * 8; // Estimated hours
@@ -86,8 +107,5 @@ export async function showProgress(userId) {
   if (hoursEl) hoursEl.innerText = totalHours + 'h';
 }
 
-// Placeholder: resume course
-function resumeCourse(courseId) {
-  console.log('Resuming course:', courseId);
-  // Future: navigate to course player page
-}
+// Bug #4 fix: Export logout for use in dashboard HTML
+export { logout };
