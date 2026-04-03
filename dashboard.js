@@ -34,11 +34,17 @@ export async function loadStudentDashboard() {
     const welcomeEl = document.getElementById('welcomeMessage');
     if (welcomeEl) welcomeEl.innerText = `Welcome back, ${safeName}! 👋`;
 
-    // Bug #22 fix: Populate profile form with real data
+    // Bug #12 fix: Populate profile form with real data
     const profileName = document.getElementById('profileName');
     const profileEmail = document.getElementById('profileEmail');
     if (profileName) profileName.value = profile.name || '';
     if (profileEmail) profileEmail.value = profile.email || '';
+
+    // Final Refinement: Show Admin Link if user is an admin
+    if (profile.role === 'admin') {
+        const adminLink = document.getElementById('adminPanelLink');
+        if (adminLink) adminLink.style.display = 'flex';
+    }
   }
 
   // Bug #13 fix: fetch enrolled courses once and reuse
