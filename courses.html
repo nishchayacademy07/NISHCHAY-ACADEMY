@@ -76,90 +76,9 @@
             </div>
 
             <!-- Course Grid -->
-            <div class="grid-3">
-                <!-- Course 1 -->
-                <div class="card course-card">
-                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb" alt="Mathematics" class="course-img">
-                    <div class="course-content">
-                        <span class="course-badge">Mathematics</span>
-                        <h3 class="card-title">Advanced Mathematics Mastery</h3>
-                        <p class="card-text">Master complex mathematical concepts with comprehensive problem-solving techniques.</p>
-                        <div class="course-price-row">
-                            <span class="course-price">₹2,999</span>
-                            <a href="#" class="btn btn-primary" onclick="enrollCourse('c1')">Enroll Now</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Course 2 -->
-                <div class="card course-card">
-                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d" alt="Science" class="course-img">
-                    <div class="course-content">
-                        <span class="course-badge">Science</span>
-                        <h3 class="card-title">Complete Science Foundation</h3>
-                        <p class="card-text">Build a strong foundation in Physics, Chemistry, and Biology.</p>
-                        <div class="course-price-row">
-                            <span class="course-price">₹3,499</span>
-                            <a href="#" class="btn btn-primary" onclick="enrollCourse('c2')">Enroll Now</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Course 3 -->
-                <div class="card course-card">
-                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3" alt="CS" class="course-img">
-                    <div class="course-content">
-                        <span class="course-badge">Computer Science</span>
-                        <h3 class="card-title">Competitive Programming</h3>
-                        <p class="card-text">Learn algorithms and data structures to ace coding interviews and competitions.</p>
-                        <div class="course-price-row">
-                            <span class="course-price">₹4,999</span>
-                            <a href="#" class="btn btn-primary" onclick="enrollCourse('c3')">Enroll Now</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Course 4 -->
-                <div class="card course-card">
-                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173" alt="JEE" class="course-img">
-                    <div class="course-content">
-                        <span class="course-badge">Competitive</span>
-                        <h3 class="card-title">JEE Mains Target Batch</h3>
-                        <p class="card-text">Intensive preparation batch focused on JEE Mains with regular mock tests.</p>
-                        <div class="course-price-row">
-                            <span class="course-price">₹8,999</span>
-                            <a href="#" class="btn btn-primary" onclick="enrollCourse('c4')">Enroll Now</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Course 5 -->
-                <div class="card course-card">
-                    <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d" alt="NEET" class="course-img">
-                    <div class="course-content">
-                        <span class="course-badge">Competitive</span>
-                        <h3 class="card-title">NEET Crash Course</h3>
-                        <p class="card-text">Quick revision and strategic preparation for NEET aspirants.</p>
-                        <div class="course-price-row">
-                            <span class="course-price">₹7,999</span>
-                            <a href="#" class="btn btn-primary" onclick="enrollCourse('c5')">Enroll Now</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Course 6 -->
-                <div class="card course-card">
-                    <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904" alt="Physics" class="course-img">
-                    <div class="course-content">
-                        <span class="course-badge">Science</span>
-                        <h3 class="card-title">Concept of Physics</h3>
-                        <p class="card-text">Deep dive into mechanics, electromagnetism, and modern physics.</p>
-                        <div class="course-price-row">
-                            <span class="course-price">₹2,499</span>
-                            <a href="#" class="btn btn-primary" onclick="enrollCourse('c6')">Enroll Now</a>
-                        </div>
-                    </div>
-                </div>
+            <div id="courseGrid" class="grid-3">
+                <!-- Dynamically loaded -->
+                <p style="color: var(--text-light); text-align: center; grid-column: 1/-1;">Loading courses...</p>
             </div>
         </div>
     </section>
@@ -195,27 +114,106 @@
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
+    <!-- Tawk.to Script -->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/69cf86d453d34c1c35ed8d3a/1jl9ba368';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+
     <!-- Scripts -->
-    <script>
+    <script type="module">
+        import { getAllCourses, filterBySubject } from './courses.js';
+        import { enrollStudent } from './enrollment.js';
+        import { getSession } from './auth.js';
+
+        const courseGrid = document.getElementById('courseGrid');
+
         // Nav toggle
         document.getElementById('navToggle').addEventListener('click', function() {
             document.getElementById('navLinks').classList.toggle('active');
         });
 
-        // Filter logic (Frontend only placeholder implementation)
-        function filterCourses(category) {
-            // Update active button
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Note: In a real app, this would hide/show courses based on category
+        // Display Courses
+        function displayCourses(courses) {
+            if (!courses || courses.length === 0) {
+                courseGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">No courses found.</p>';
+                return;
+            }
+
+            courseGrid.innerHTML = courses.map(course => `
+                <div class="card course-card">
+                    <img src="${course.image_url || 'https://via.placeholder.com/400x200?text=No+Image'}" alt="${course.title}" class="course-img">
+                    <div class="course-content">
+                        <span class="course-badge">${course.subject}</span>
+                        <h3 class="card-title">${course.title}</h3>
+                        <p class="card-text">${course.description}</p>
+                        <div class="course-price-row">
+                            <span class="course-price">₹${course.price}</span>
+                            <button class="btn btn-primary" onclick="enrollCourse('${course.id}')">Enroll Now</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        // Empty backend function
-        function enrollCourse(courseId) {
-            // Logic for DB connection here
-            console.log("Enrolling in course: " + courseId);
-        }
+        // Filter logic
+        window.filterCourses = async function(category) {
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if (event && event.target) event.target.classList.add('active');
+            
+            try {
+                courseGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">Filtering...</p>';
+                const courses = await filterBySubject(category);
+                displayCourses(courses);
+            } catch (err) {
+                alert("Error filtering courses: " + err.message);
+            }
+        };
+
+        // Enroll logic
+        window.enrollCourse = async function(courseId) {
+            try {
+                const session = await getSession();
+                if (!session) {
+                    alert("Please login to enroll in courses.");
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                const btn = event.target;
+                btn.disabled = true;
+                btn.innerText = 'Enrolling...';
+
+                await enrollStudent(session.user.id, courseId);
+                alert("Successfully enrolled! Redirecting to dashboard...");
+                window.location.href = "dashboard.html";
+            } catch (err) {
+                alert("Enrollment Error: " + err.message);
+            } finally {
+                if (event && event.target) {
+                    event.target.disabled = false;
+                    event.target.innerText = 'Enroll Now';
+                }
+            }
+        };
+
+        // Initial load
+        (async () => {
+            try {
+                const courses = await getAllCourses();
+                displayCourses(courses);
+            } catch (err) {
+                courseGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: red;">Error loading courses.</p>';
+            }
+        })();
     </script>
 </body>
 </html>
