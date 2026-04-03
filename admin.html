@@ -7,10 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background-color: var(--bg-color);
-        }
-        
+        body { background-color: var(--bg-color); }
         .topbar {
             background-color: #1a1e21;
             color: white;
@@ -22,123 +19,48 @@
             top: 0;
             z-index: 100;
         }
-
-        .topbar .navbar-brand {
-            color: white;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            cursor: pointer;
-        }
-
+        .topbar .navbar-brand { color: white; }
+        .user-menu { display: flex; align-items: center; gap: 15px; cursor: pointer; }
         .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
+            width: 40px; height: 40px; border-radius: 50%;
+            background-color: var(--primary-color); color: white;
+            display: flex; align-items: center; justify-content: center; font-weight: 600;
         }
-
-        .sidebar {
-            background-color: #212529;
-            color: white;
-        }
-
-        .sidebar-link {
-            color: #adb5bd;
-            border-left-color: transparent;
-        }
-
+        .sidebar { background-color: #212529; color: white; }
+        .sidebar-link { color: #adb5bd; border-left-color: transparent; }
         .sidebar-link:hover, .sidebar-link.active {
-            background-color: #343a40;
-            color: white;
-            border-left-color: var(--primary-color);
+            background-color: #343a40; color: white; border-left-color: var(--primary-color);
         }
-
-        .admin-section {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .admin-section.active {
-            display: block;
-        }
-
+        .admin-section { display: none; animation: fadeIn 0.3s ease; }
+        .admin-section.active { display: block; }
         .action-btn {
-            padding: 6px 12px;
-            font-size: 0.85rem;
-            border: none;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            color: white;
-            transition: var(--transition);
+            padding: 6px 12px; font-size: 0.85rem; border: none;
+            border-radius: var(--radius-sm); cursor: pointer; color: white; transition: var(--transition);
         }
-
         .btn-edit { background-color: #ffc107; color: black; }
         .btn-delete { background-color: #dc3545; }
-        
         .btn-edit:hover { background-color: #e0a800; }
         .btn-delete:hover { background-color: #c82333; }
-
         .file-upload-wrapper {
-            position: relative;
-            width: 100%;
-            height: 150px;
-            border: 2px dashed #ced4da;
-            border-radius: var(--radius-md);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: var(--transition);
+            position: relative; width: 100%; height: 150px;
+            border: 2px dashed #ced4da; border-radius: var(--radius-md);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: var(--text-light); cursor: pointer; transition: var(--transition);
         }
-
         .file-upload-wrapper:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            background-color: #f1f8ff;
+            border-color: var(--primary-color); color: var(--primary-color); background-color: #f1f8ff;
         }
-
         .file-upload-wrapper input[type="file"] {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
+            position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer;
         }
-        
         .mobile-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            color: white;
-            cursor: pointer;
+            display: none; background: none; border: none;
+            font-size: 1.2rem; color: white; cursor: pointer;
         }
-        
         @media (max-width: 768px) {
-            .mobile-toggle {
-                display: block;
-            }
-            .sidebar {
-                position: fixed;
-                left: -250px;
-                height: 100vh;
-                z-index: 1000;
-            }
-            .sidebar.active {
-                left: 0;
-                box-shadow: var(--shadow-lg);
-            }
+            .mobile-toggle { display: block; }
+            .sidebar { position: fixed; left: -250px; height: 100vh; z-index: 1000; }
+            .sidebar.active { left: 0; box-shadow: var(--shadow-lg); }
         }
     </style>
 </head>
@@ -147,15 +69,16 @@
     <!-- Topbar -->
     <div class="topbar">
         <div style="display: flex; align-items: center; gap: 15px;">
-            <button class="mobile-toggle" onclick="toggleSidebar()">
+            <button class="mobile-toggle" id="mobileToggle">
                 <i class="fa-solid fa-bars"></i>
             </button>
             <a href="index.html" class="navbar-brand" style="font-size: 1.2rem;">
                 <i class="fa-solid fa-shield-halved"></i> Admin Panel
             </a>
         </div>
+        <!-- Bug #11 fix: replaced invalid inline @media with proper CSS class -->
         <div class="user-menu">
-            <div style="text-align: right; display: none; @media(min-width: 576px){display: block;}">
+            <div class="user-info-desktop">
                 <p style="margin: 0; font-weight: 500; font-size: 0.9rem;">Administrator</p>
             </div>
             <div class="user-avatar">AD</div>
@@ -164,26 +87,27 @@
 
     <!-- Main Layout -->
     <div class="dashboard-layout">
-        
         <!-- Sidebar Navigation -->
         <div class="sidebar" id="sidebar">
             <div style="padding: 0 20px 20px; color: #6c757d; font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">Main Menu</div>
-            
-            <a href="#" class="sidebar-link active" onclick="switchAdminSection('dashboard')">
+            <a href="#" class="sidebar-link active" data-section="dashboard">
                 <i class="fa-solid fa-chart-pie" style="width: 20px;"></i> Overview
             </a>
-            <a href="#" class="sidebar-link" onclick="switchAdminSection('courses')">
+            <a href="#" class="sidebar-link" data-section="courses">
                 <i class="fa-solid fa-book" style="width: 20px;"></i> Manage Courses
             </a>
-            <a href="#" class="sidebar-link" onclick="switchAdminSection('add-course')">
+            <a href="#" class="sidebar-link" data-section="add-course">
                 <i class="fa-solid fa-plus-circle" style="width: 20px;"></i> Add Course
             </a>
-            <a href="#" class="sidebar-link" onclick="switchAdminSection('students')">
+            <a href="#" class="sidebar-link" data-section="students">
                 <i class="fa-solid fa-users" style="width: 20px;"></i> Students List
             </a>
-            
+            <a href="#" class="sidebar-link" data-section="settings">
+                <i class="fa-solid fa-gear" style="width: 20px;"></i> Site Settings
+            </a>
             <div style="margin-top: 50px; border-top: 1px solid #343a40; padding-top: 20px;">
-                <a href="index.html" class="sidebar-link" style="color: #dc3545;">
+                <!-- Bug #6 fix: real logout -->
+                <a href="#" class="sidebar-link" style="color: #dc3545;" id="logoutBtn">
                     <i class="fa-solid fa-right-from-bracket" style="width: 20px;"></i> Logout
                 </a>
             </div>
@@ -215,9 +139,8 @@
             <div id="section-courses" class="admin-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h2 style="color: var(--text-dark); margin: 0;">Manage Courses</h2>
-                    <button class="btn btn-primary" onclick="switchAdminSection('add-course')">Add New Course</button>
+                    <button class="btn btn-primary" id="addNewCourseBtn">Add New Course</button>
                 </div>
-                
                 <div class="table-responsive card" style="padding: 0;">
                     <table class="table">
                         <thead>
@@ -229,7 +152,7 @@
                             </tr>
                         </thead>
                         <tbody id="coursesTableBody">
-                            <!-- Dynamically loaded -->
+                            <tr><td colspan="4" style="text-align:center; color: var(--text-light);">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -238,18 +161,16 @@
             <!-- Add Course Section -->
             <div id="section-add-course" class="admin-section">
                 <h2 style="color: var(--text-dark); margin-bottom: 20px;">Add New Course</h2>
-                
                 <div class="card" style="max-width: 800px;">
-                    <form onsubmit="handleCourseUpload(event)">
+                    <form id="addCourseForm">
                         <div class="form-group">
                             <label class="form-label">Course Thumbnail Image</label>
                             <div class="file-upload-wrapper">
-                                <input type="file" accept="image/*" onchange="previewImage(event)">
+                                <input type="file" accept="image/*" id="courseImageInput">
                                 <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; margin-bottom: 10px;"></i>
                                 <span id="uploadText">Click or Drag & Drop Image Here</span>
                             </div>
                         </div>
-
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                             <div class="form-group">
                                 <label class="form-label">Course Title</label>
@@ -266,20 +187,17 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label class="form-label">Course Price (₹)</label>
-                            <input type="number" id="addCoursePrice" class="form-control" placeholder="E.g. 2999" required>
+                            <input type="number" id="addCoursePrice" class="form-control" placeholder="E.g. 2999" required min="0">
                         </div>
-
                         <div class="form-group">
                             <label class="form-label">Course Description</label>
-                            <textarea id="addCourseDesc" class="form-control" placeholder="Briefly describe the course content..." required></textarea>
+                            <textarea id="addCourseDesc" class="form-control" placeholder="Briefly describe the course content..." required minlength="10"></textarea>
                         </div>
-
                         <div style="display: flex; gap: 15px; margin-top: 20px;">
-                            <button type="submit" class="btn btn-primary">Publish Course</button>
-                            <button type="button" class="btn btn-outline" onclick="switchAdminSection('courses')">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="publishBtn">Publish Course</button>
+                            <button type="button" class="btn btn-outline" id="cancelAddBtn">Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -288,7 +206,6 @@
             <!-- Students List Section -->
             <div id="section-students" class="admin-section">
                 <h2 style="color: var(--text-dark); margin-bottom: 20px;">Enrolled Students</h2>
-                
                 <div class="table-responsive card" style="padding: 0;">
                     <table class="table">
                         <thead>
@@ -300,9 +217,43 @@
                             </tr>
                         </thead>
                         <tbody id="studentsTableBody">
-                            <!-- Dynamically loaded -->
+                            <tr><td colspan="4" style="text-align:center; color: var(--text-light);">Loading...</td></tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- Site Settings Section -->
+            <div id="section-settings" class="admin-section">
+                <h2 style="color: var(--text-dark); margin-bottom: 20px;">Global Site Settings</h2>
+                <div class="card" style="max-width: 800px;">
+                    <form id="siteSettingsForm">
+                        <div class="form-group">
+                            <label class="form-label">Site Logo (Upload via Cloudinary)</label>
+                            <div class="file-upload-wrapper" id="logoUploadWrapper">
+                                <input type="file" accept="image/*" id="siteLogoInput">
+                                <i class="fa-solid fa-image" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                                <span id="logoUploadText">Click to Change Logo</span>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div class="form-group">
+                                <label class="form-label">Theme Color (Primary)</label>
+                                <input type="color" id="sitePrimaryColor" class="form-control" style="height: 50px; cursor: pointer;">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">WhatsApp Number</label>
+                                <input type="text" id="siteWhatsapp" class="form-control" placeholder="E.g. 919876543210 (include country code)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contact Email</label>
+                            <input type="email" id="siteContactEmail" class="form-control" placeholder="hello@nishchayacademy.com">
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <button type="submit" class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -324,8 +275,13 @@
 
     <!-- Scripts -->
     <script type="module">
-        import { redirectIfNotAdmin } from './auth.js';
+        import { applyGlobalSettings, getSiteSettings, updateSiteSettings } from './settings.js';
+        import { redirectIfNotAdmin, logout, sanitize } from './auth.js';
         import { getAllStudents, getDashboardStats, deleteStudent } from './admin.js';
+        
+        // Settings Initialization
+        applyGlobalSettings();
+
         import { getAllCourses, addCourse, deleteCourse } from './courses.js';
         import { uploadImage } from './upload.js';
 
@@ -334,106 +290,152 @@
         // Protect Page
         redirectIfNotAdmin();
 
-        window.toggleSidebar = function() {
-            document.getElementById('sidebar').classList.toggle('active');
-        };
+        // --- Section Switching ---
+        function switchSection(sectionId) {
+            document.querySelectorAll('.sidebar-link[data-section]').forEach(link => link.classList.remove('active'));
+            const activeLink = document.querySelector(`.sidebar-link[data-section="${sectionId}"]`);
+            if (activeLink) activeLink.classList.add('active');
 
-        window.switchAdminSection = function(sectionId) {
-            document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
-            if (event && event.currentTarget && event.currentTarget.classList) {
-                event.currentTarget.classList.add('active');
-            }
-            document.querySelectorAll('.admin-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById('section-' + sectionId).classList.add('active');
-            if(window.innerWidth <= 768) {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById('section-' + sectionId);
+            if (target) target.classList.add('active');
+
+            if (window.innerWidth <= 768) {
                 document.getElementById('sidebar').classList.remove('active');
             }
-            
-            // Reload data based on section
-            if(sectionId === 'dashboard') loadStats();
-            if(sectionId === 'courses') loadCourses();
-            if(sectionId === 'students') loadStudents();
-        };
 
-        window.previewImage = function(event) {
-            selectedFile = event.target.files[0];
-            const fileName = selectedFile ? selectedFile.name : "Image Selected";
-            document.getElementById('uploadText').innerText = fileName;
-        };
+            if (sectionId === 'dashboard') loadStats();
+            if (sectionId === 'courses') loadCourses();
+            if (sectionId === 'students') loadStudents();
+            if (sectionId === 'settings') loadSiteSettings();
+        }
 
+        // Sidebar links — event listeners instead of inline onclick
+        document.querySelectorAll('.sidebar-link[data-section]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                switchSection(this.dataset.section);
+            });
+        });
+
+        // Mobile toggle
+        document.getElementById('mobileToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+
+        // Bug #6 fix: real logout
+        document.getElementById('logoutBtn').addEventListener('click', async function(e) {
+            e.preventDefault();
+            try { await logout(); } catch (err) { alert('Logout failed: ' + err.message); }
+        });
+
+        // "Add New Course" button in Manage Courses section
+        document.getElementById('addNewCourseBtn').addEventListener('click', function() {
+            switchSection('add-course');
+        });
+
+        // Cancel button in Add Course form
+        document.getElementById('cancelAddBtn').addEventListener('click', function() {
+            switchSection('courses');
+        });
+
+        // Image preview
+        document.getElementById('courseImageInput').addEventListener('change', function() {
+            selectedFile = this.files[0];
+            document.getElementById('uploadText').innerText = selectedFile ? selectedFile.name : "Click or Drag & Drop Image Here";
+        });
+
+        // --- Data Loading ---
         async function loadStats() {
             try {
                 const stats = await getDashboardStats();
                 document.getElementById('statTotalStudents').innerText = stats.totalStudents;
                 document.getElementById('statTotalCourses').innerText = stats.totalCourses;
                 document.getElementById('statTotalEnrollments').innerText = stats.totalEnrollments;
-            } catch (err) { console.error(err); }
+            } catch (err) { console.error('Stats load error:', err); }
         }
 
         async function loadCourses() {
             try {
                 const courses = await getAllCourses();
                 const tbody = document.getElementById('coursesTableBody');
+                if (!courses || courses.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No courses found.</td></tr>';
+                    return;
+                }
+                // Bug #9 fix: sanitize all data before rendering
                 tbody.innerHTML = courses.map(c => `
                     <tr>
-                        <td style="font-weight: 500;">${c.title}</td>
-                        <td><span class="course-badge" style="margin:0;">${c.subject}</span></td>
-                        <td>₹${c.price}</td>
+                        <td style="font-weight: 500;">${sanitize(c.title)}</td>
+                        <td><span class="course-badge" style="margin:0;">${sanitize(c.subject)}</span></td>
+                        <td>₹${parseFloat(c.price || 0).toLocaleString('en-IN')}</td>
                         <td>
-                            <button class="action-btn btn-delete" onclick="handleDeleteCourse('${c.id}')"><i class="fa-solid fa-trash"></i></button>
+                            <button class="action-btn btn-delete delete-course-btn" data-id="${c.id}"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `).join('');
-            } catch (err) { console.error(err); }
+
+                // Attach delete handlers
+                tbody.querySelectorAll('.delete-course-btn').forEach(btn => {
+                    btn.addEventListener('click', async function() {
+                        if (!confirm("Are you sure you want to delete this course?")) return;
+                        try {
+                            await deleteCourse(this.dataset.id);
+                            loadCourses();
+                        } catch (err) { alert('Delete failed: ' + err.message); }
+                    });
+                });
+            } catch (err) { console.error('Courses load error:', err); }
         }
 
         async function loadStudents() {
             try {
                 const students = await getAllStudents();
                 const tbody = document.getElementById('studentsTableBody');
-                tbody.innerHTML = students.map(s => `
+                if (!students || students.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No students found.</td></tr>';
+                    return;
+                }
+                // Bug #9 fix: sanitize
+                tbody.innerHTML = students.map(s => {
+                    const safeName = sanitize(s.name);
+                    const safeEmail = sanitize(s.email);
+                    return `
                     <tr>
                         <td style="display: flex; align-items: center; gap: 10px; font-weight: 500;">
-                            <img src="https://ui-avatars.com/api/?name=${s.name}" alt="avatar" style="width: 30px; border-radius: 50%;">
-                            ${s.name}
+                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(s.name)}" alt="avatar" style="width: 30px; border-radius: 50%;">
+                            ${safeName}
                         </td>
-                        <td>${s.email}</td>
+                        <td>${safeEmail}</td>
                         <td>${new Date(s.created_at).toLocaleDateString()}</td>
                         <td>
-                            <button class="action-btn btn-delete" onclick="handleDeleteStudent('${s.id}')"><i class="fa-solid fa-trash"></i></button>
+                            <button class="action-btn btn-delete delete-student-btn" data-id="${s.id}"><i class="fa-solid fa-trash"></i></button>
                         </td>
-                    </tr>
-                `).join('');
-            } catch (err) { console.error(err); }
+                    </tr>`;
+                }).join('');
+
+                tbody.querySelectorAll('.delete-student-btn').forEach(btn => {
+                    btn.addEventListener('click', async function() {
+                        if (!confirm("Are you sure you want to delete this student?")) return;
+                        try {
+                            await deleteStudent(this.dataset.id);
+                            loadStudents();
+                        } catch (err) { alert('Delete failed: ' + err.message); }
+                    });
+                });
+            } catch (err) { console.error('Students load error:', err); }
         }
 
-        window.handleDeleteCourse = async function(id) {
-            if(!confirm("Are you sure?")) return;
-            try {
-                await deleteCourse(id);
-                loadCourses();
-            } catch (err) { alert(err.message); }
-        };
-
-        window.handleDeleteStudent = async function(id) {
-            if(!confirm("Are you sure?")) return;
-            try {
-                await deleteStudent(id);
-                loadStudents();
-            } catch (err) { alert(err.message); }
-        };
-
-        window.handleCourseUpload = async function(e) {
+        // --- Add Course Form --- Bug #7 fix: switchSection is now a proper function, not window.switchAdminSection
+        document.getElementById('addCourseForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
+            const btn = document.getElementById('publishBtn');
             try {
                 btn.disabled = true;
                 btn.innerText = 'Uploading...';
                 
                 let imageUrl = '';
-                if(selectedFile) {
+                if (selectedFile) {
                     imageUrl = await uploadImage(selectedFile);
                 }
 
@@ -447,15 +449,74 @@
 
                 alert("Course added successfully!");
                 e.target.reset();
+                // Bug #23 fix: clear selectedFile on form reset
+                selectedFile = null;
                 document.getElementById('uploadText').innerText = "Click or Drag & Drop Image Here";
-                switchAdminSection('courses');
+                // Bug #7 fix: call local function, not window.switchAdminSection
+                switchSection('courses');
             } catch (err) {
                 alert("Error: " + err.message);
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'Publish Course';
             }
-        };
+        });
+
+        // --- Site Settings Integration ---
+        let selectedLogoFile = null;
+
+        document.getElementById('siteLogoInput').addEventListener('change', function() {
+            selectedLogoFile = this.files[0];
+            document.getElementById('logoUploadText').innerText = selectedLogoFile ? selectedLogoFile.name : "Click to Change Logo";
+        });
+
+        async function loadSiteSettings() {
+            try {
+                const settings = await getSiteSettings();
+                document.getElementById('sitePrimaryColor').value = settings.primary_color || '#0d6efd';
+                document.getElementById('siteWhatsapp').value = settings.whatsapp_number || '';
+                document.getElementById('siteContactEmail').value = settings.contact_email || '';
+            } catch (err) {
+                console.error("Failed to load settings:", err);
+            }
+        }
+
+        document.getElementById('siteSettingsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('saveSettingsBtn');
+            try {
+                btn.disabled = true;
+                btn.innerText = 'Saving...';
+
+                let logoUrl = undefined;
+                if (selectedLogoFile) {
+                    btn.innerText = 'Uploading Logo...';
+                    logoUrl = await uploadImage(selectedLogoFile);
+                }
+
+                const updates = {
+                    primary_color: document.getElementById('sitePrimaryColor').value,
+                    whatsapp_number: document.getElementById('siteWhatsapp').value,
+                    contact_email: document.getElementById('siteContactEmail').value
+                };
+
+                if (logoUrl) {
+                    updates.logo_url = logoUrl;
+                }
+
+                await updateSiteSettings(updates);
+                
+                // Re-apply immediately
+                await applyGlobalSettings();
+                
+                alert("Site Settings Saved successfully!");
+            } catch (err) {
+                alert("Error saving settings: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Save Settings';
+            }
+        });
 
         // Initial load
         loadStats();
