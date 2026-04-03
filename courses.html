@@ -127,6 +127,7 @@
     <!-- Scripts -->
     <script type="module">
         import { applyGlobalSettings } from './settings.js';
+        import { isSupabaseConnected } from './supabase.js';
         import { getAllCourses, filterBySubject } from './courses.js';
         import { enrollStudent } from './enrollment.js';
         import { getSession, sanitize } from './auth.js';
@@ -219,11 +220,29 @@
         // Initial load
         (async () => {
             try {
+                if (!isSupabaseConnected()) {
+                   courseGrid.innerHTML = `
+                    <div style="text-align: center; grid-column: 1/-1; padding: 40px; background: #fff; border-radius: 8px; box-shadow: var(--shadow-md);">
+                        <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem; color: #dc3545; margin-bottom: 15px; display:block;"></i>
+                        <h3 style="color: #dc3545;">Database Connection Required</h3>
+                        <p style="color: var(--text-light); margin: 15px 0;">Please follow these steps to connect your database:</p>
+                        <ol style="display:inline-block; text-align:left; color: var(--text-dark); background: #f8f9fa; padding: 20px; border-radius: 4px; border: 1px solid #eee;">
+                            <li>Open the file <b>supabase.js</b> in your editor.</li>
+                            <li>Go to line 13 and replace the placeholder with your <b>anon</b> key from Supabase dashboard.</li>
+                            <li>Save the file and refresh this page.</li>
+                        </ol>
+                    </div>`;
+                    return;
+                }
                 const courses = await getAllCourses();
                 displayCourses(courses);
             } catch (err) {
-                courseGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: red;">Error loading courses. Please try again later.</p>';
-                console.error(err);
+                console.error("Supabase Error:", err);
+                courseGrid.innerHTML = `
+                <p style="text-align: center; grid-column: 1/-1; color: red; padding: 20px; background: #fff5f5; border-radius: 8px;">
+                    <b>Error:</b> ${err.message || 'Something went wrong while loading courses.'}
+                    <br><small style="color: #666;">Check the browser console (F12) for more details.</small>
+                </p>`;
             }
         })();
     </script>
