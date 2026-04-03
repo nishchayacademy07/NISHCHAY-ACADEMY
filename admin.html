@@ -197,16 +197,16 @@
                 <h2 style="color: var(--text-dark); margin-bottom: 20px;">Admin Dashboard</h2>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
                     <div class="card" style="padding: 20px; text-align: center;">
-                        <h3 style="font-size: 2rem; color: var(--primary-color);">1,245</h3>
+                        <h3 id="statTotalStudents" style="font-size: 2rem; color: var(--primary-color);">0</h3>
                         <p style="color: var(--text-light);">Total Students</p>
                     </div>
                     <div class="card" style="padding: 20px; text-align: center;">
-                        <h3 style="font-size: 2rem; color: var(--primary-color);">24</h3>
+                        <h3 id="statTotalCourses" style="font-size: 2rem; color: var(--primary-color);">0</h3>
                         <p style="color: var(--text-light);">Active Courses</p>
                     </div>
                     <div class="card" style="padding: 20px; text-align: center;">
-                        <h3 style="font-size: 2rem; color: var(--primary-color);">₹1.2M</h3>
-                        <p style="color: var(--text-light);">Revenue This Month</p>
+                        <h3 id="statTotalEnrollments" style="font-size: 2rem; color: var(--primary-color);">0</h3>
+                        <p style="color: var(--text-light);">Total Enrollments</p>
                     </div>
                 </div>
             </div>
@@ -225,41 +225,11 @@
                                 <th>Course Title</th>
                                 <th>Category</th>
                                 <th>Price</th>
-                                <th>Enrolled</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td style="font-weight: 500;">Advanced Mathematics Mastery</td>
-                                <td><span class="course-badge" style="margin:0;">Mathematics</span></td>
-                                <td>₹2,999</td>
-                                <td>342</td>
-                                <td>
-                                    <button class="action-btn btn-edit" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                                    <button class="action-btn btn-delete" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 500;">Complete Science Foundation</td>
-                                <td><span class="course-badge" style="margin:0; background: #28a745;">Science</span></td>
-                                <td>₹3,499</td>
-                                <td>280</td>
-                                <td>
-                                    <button class="action-btn btn-edit" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                                    <button class="action-btn btn-delete" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 500;">Competitive Programming</td>
-                                <td><span class="course-badge" style="margin:0; background: #6f42c1;">Computer Science</span></td>
-                                <td>₹4,999</td>
-                                <td>150</td>
-                                <td>
-                                    <button class="action-btn btn-edit" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                                    <button class="action-btn btn-delete" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                                </td>
-                            </tr>
+                        <tbody id="coursesTableBody">
+                            <!-- Dynamically loaded -->
                         </tbody>
                     </table>
                 </div>
@@ -283,28 +253,28 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                             <div class="form-group">
                                 <label class="form-label">Course Title</label>
-                                <input type="text" class="form-control" placeholder="E.g. Advanced Physics" required>
+                                <input type="text" id="addCourseTitle" class="form-control" placeholder="E.g. Advanced Physics" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Category</label>
-                                <select class="form-control" required style="cursor: pointer;">
+                                <select id="addCourseCategory" class="form-control" required style="cursor: pointer;">
                                     <option value="" disabled selected>Select Category</option>
-                                    <option value="math">Mathematics</option>
-                                    <option value="science">Science</option>
-                                    <option value="cs">Computer Science</option>
-                                    <option value="competitive">Competitive Exams</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                    <option value="Science">Science</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Competitive">Competitive Exams</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Course Price (₹)</label>
-                            <input type="number" class="form-control" placeholder="E.g. 2999" required>
+                            <input type="number" id="addCoursePrice" class="form-control" placeholder="E.g. 2999" required>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Course Description</label>
-                            <textarea class="form-control" placeholder="Briefly describe the course content..." required></textarea>
+                            <textarea id="addCourseDesc" class="form-control" placeholder="Briefly describe the course content..." required></textarea>
                         </div>
 
                         <div style="display: flex; gap: 15px; margin-top: 20px;">
@@ -325,48 +295,12 @@
                             <tr>
                                 <th>Student Name</th>
                                 <th>Email</th>
-                                <th>Enrolled Courses</th>
                                 <th>Joined Date</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td style="display: flex; align-items: center; gap: 10px; font-weight: 500;">
-                                    <img src="https://ui-avatars.com/api/?name=Rahul+Kumar" alt="avatar" style="width: 30px; border-radius: 50%;">
-                                    Rahul Kumar
-                                </td>
-                                <td>rahul@example.com</td>
-                                <td>2</td>
-                                <td>12 Jan 2026</td>
-                                <td>
-                                    <button class="action-btn btn-outline" style="padding: 4px 8px;" title="View Details"><i class="fa-solid fa-eye"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="display: flex; align-items: center; gap: 10px; font-weight: 500;">
-                                    <img src="https://ui-avatars.com/api/?name=Priya+Sharma" alt="avatar" style="width: 30px; border-radius: 50%;">
-                                    Priya Sharma
-                                </td>
-                                <td>priya@example.com</td>
-                                <td>1</td>
-                                <td>05 Feb 2026</td>
-                                <td>
-                                    <button class="action-btn btn-outline" style="padding: 4px 8px;" title="View Details"><i class="fa-solid fa-eye"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="display: flex; align-items: center; gap: 10px; font-weight: 500;">
-                                    <img src="https://ui-avatars.com/api/?name=Amit+Patel" alt="avatar" style="width: 30px; border-radius: 50%;">
-                                    Amit Patel
-                                </td>
-                                <td>amit@example.com</td>
-                                <td>3</td>
-                                <td>22 Mar 2026</td>
-                                <td>
-                                    <button class="action-btn btn-outline" style="padding: 4px 8px;" title="View Details"><i class="fa-solid fa-eye"></i></button>
-                                </td>
-                            </tr>
+                        <tbody id="studentsTableBody">
+                            <!-- Dynamically loaded -->
                         </tbody>
                     </table>
                 </div>
@@ -375,47 +309,156 @@
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script>
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
+    <!-- Tawk.to Script -->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/69cf86d453d34c1c35ed8d3a/1jl9ba368';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
 
-        function switchAdminSection(sectionId) {
-            // Update Active Link UI
+    <!-- Scripts -->
+    <script type="module">
+        import { redirectIfNotAdmin } from './auth.js';
+        import { getAllStudents, getDashboardStats, deleteStudent } from './admin.js';
+        import { getAllCourses, addCourse, deleteCourse } from './courses.js';
+        import { uploadImage } from './upload.js';
+
+        let selectedFile = null;
+
+        // Protect Page
+        redirectIfNotAdmin();
+
+        window.toggleSidebar = function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        };
+
+        window.switchAdminSection = function(sectionId) {
             document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
-            // Use event.target if triggered by click, else find by logic (simplified mock)
-            if(event && event.currentTarget && event.currentTarget.classList) {
+            if (event && event.currentTarget && event.currentTarget.classList) {
                 event.currentTarget.classList.add('active');
             }
-
-            // Hide all sections
             document.querySelectorAll('.admin-section').forEach(section => {
                 section.classList.remove('active');
             });
-
-            // Show target section
             document.getElementById('section-' + sectionId).classList.add('active');
-            
-            // Mobile auto-close
             if(window.innerWidth <= 768) {
                 document.getElementById('sidebar').classList.remove('active');
             }
-        }
+            
+            // Reload data based on section
+            if(sectionId === 'dashboard') loadStats();
+            if(sectionId === 'courses') loadCourses();
+            if(sectionId === 'students') loadStudents();
+        };
 
-        function previewImage(event) {
-            const fileName = event.target.files[0] ? event.target.files[0].name : "Image Selected";
+        window.previewImage = function(event) {
+            selectedFile = event.target.files[0];
+            const fileName = selectedFile ? selectedFile.name : "Image Selected";
             document.getElementById('uploadText').innerText = fileName;
+        };
+
+        async function loadStats() {
+            try {
+                const stats = await getDashboardStats();
+                document.getElementById('statTotalStudents').innerText = stats.totalStudents;
+                document.getElementById('statTotalCourses').innerText = stats.totalCourses;
+                document.getElementById('statTotalEnrollments').innerText = stats.totalEnrollments;
+            } catch (err) { console.error(err); }
         }
 
-        function handleCourseUpload(e) {
-            e.preventDefault();
-            console.log("Mock Image upload and form submission triggered");
-            alert("Course added successfully! (Backend required to save data)");
-            e.target.reset();
-            document.getElementById('uploadText').innerText = "Click or Drag & Drop Image Here";
-            switchAdminSection('courses');
+        async function loadCourses() {
+            try {
+                const courses = await getAllCourses();
+                const tbody = document.getElementById('coursesTableBody');
+                tbody.innerHTML = courses.map(c => `
+                    <tr>
+                        <td style="font-weight: 500;">${c.title}</td>
+                        <td><span class="course-badge" style="margin:0;">${c.subject}</span></td>
+                        <td>₹${c.price}</td>
+                        <td>
+                            <button class="action-btn btn-delete" onclick="handleDeleteCourse('${c.id}')"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) { console.error(err); }
         }
+
+        async function loadStudents() {
+            try {
+                const students = await getAllStudents();
+                const tbody = document.getElementById('studentsTableBody');
+                tbody.innerHTML = students.map(s => `
+                    <tr>
+                        <td style="display: flex; align-items: center; gap: 10px; font-weight: 500;">
+                            <img src="https://ui-avatars.com/api/?name=${s.name}" alt="avatar" style="width: 30px; border-radius: 50%;">
+                            ${s.name}
+                        </td>
+                        <td>${s.email}</td>
+                        <td>${new Date(s.created_at).toLocaleDateString()}</td>
+                        <td>
+                            <button class="action-btn btn-delete" onclick="handleDeleteStudent('${s.id}')"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) { console.error(err); }
+        }
+
+        window.handleDeleteCourse = async function(id) {
+            if(!confirm("Are you sure?")) return;
+            try {
+                await deleteCourse(id);
+                loadCourses();
+            } catch (err) { alert(err.message); }
+        };
+
+        window.handleDeleteStudent = async function(id) {
+            if(!confirm("Are you sure?")) return;
+            try {
+                await deleteStudent(id);
+                loadStudents();
+            } catch (err) { alert(err.message); }
+        };
+
+        window.handleCourseUpload = async function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            try {
+                btn.disabled = true;
+                btn.innerText = 'Uploading...';
+                
+                let imageUrl = '';
+                if(selectedFile) {
+                    imageUrl = await uploadImage(selectedFile);
+                }
+
+                await addCourse({
+                    title: document.getElementById('addCourseTitle').value,
+                    subject: document.getElementById('addCourseCategory').value,
+                    price: document.getElementById('addCoursePrice').value,
+                    description: document.getElementById('addCourseDesc').value,
+                    image_url: imageUrl
+                });
+
+                alert("Course added successfully!");
+                e.target.reset();
+                document.getElementById('uploadText').innerText = "Click or Drag & Drop Image Here";
+                switchAdminSection('courses');
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Publish Course';
+            }
+        };
+
+        // Initial load
+        loadStats();
     </script>
 </body>
 </html>
