@@ -15,7 +15,6 @@
             background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(225,238,255,1) 100%);
             padding: 40px 20px;
         }
-
         .auth-card {
             background: var(--white);
             width: 100%;
@@ -25,37 +24,30 @@
             overflow: hidden;
             position: relative;
         }
-
         .auth-header {
             text-align: center;
             padding: 30px 20px 20px;
         }
-        
         .auth-logo {
             font-size: 2rem;
             color: var(--primary-color);
             margin-bottom: 10px;
         }
-
         .auth-body {
             padding: 0 30px 30px;
         }
-
         .auth-form {
             display: none;
             animation: fadeIn 0.4s ease;
         }
-
         .auth-form.active {
             display: block;
         }
-
         .social-auth {
             display: flex;
             gap: 15px;
             margin-top: 20px;
         }
-
         .btn-social {
             flex: 1;
             display: flex;
@@ -71,11 +63,9 @@
             cursor: pointer;
             transition: var(--transition);
         }
-
         .btn-social:hover {
             background: #f8f9fa;
         }
-
         .divider {
             display: flex;
             align-items: center;
@@ -84,21 +74,13 @@
             color: var(--text-light);
             font-size: 0.9rem;
         }
-
         .divider::before, .divider::after {
             content: '';
             flex: 1;
             border-bottom: 1px solid #ced4da;
         }
-
-        .divider::before {
-            margin-right: .25em;
-        }
-
-        .divider::after {
-            margin-left: .25em;
-        }
-
+        .divider::before { margin-right: .25em; }
+        .divider::after { margin-left: .25em; }
         .forgot-link {
             display: block;
             text-align: right;
@@ -106,7 +88,6 @@
             margin-top: -10px;
             margin-bottom: 20px;
         }
-
         .back-to-home {
             position: absolute;
             top: 20px;
@@ -115,88 +96,78 @@
             font-size: 1.2rem;
             z-index: 10;
         }
-        
         .back-to-home:hover {
             color: var(--primary-color);
+        }
+        .auth-error {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            display: none;
+            padding: 10px;
+            background: #f8d7da;
+            border-radius: var(--radius-sm);
+        }
+        .auth-error.visible {
+            display: block;
         }
     </style>
 </head>
 <body>
 
     <div class="auth-container">
-        
         <div class="auth-card">
             <a href="index.html" class="back-to-home"><i class="fa-solid fa-arrow-left"></i></a>
             
             <div class="auth-header">
                 <div class="auth-logo"><i class="fa-solid fa-graduation-cap"></i></div>
-                <h2 style="color: var(--text-dark);">Welcome Back</h2>
-                <p style="color: var(--text-light); font-size: 0.9rem;">Please enter your details to sign in.</p>
+                <h2 id="authTitle" style="color: var(--text-dark);">Welcome Back</h2>
+                <p id="authSubtitle" style="color: var(--text-light); font-size: 0.9rem;">Please enter your details to sign in.</p>
             </div>
 
             <!-- Tabs -->
             <div class="auth-tabs">
-                <div class="auth-tab active" onclick="switchTab('login')">Login</div>
-                <div class="auth-tab" onclick="switchTab('signup')">Sign Up</div>
+                <div class="auth-tab active" data-tab="login">Login</div>
+                <div class="auth-tab" data-tab="signup">Sign Up</div>
             </div>
 
             <div class="auth-body">
-                
+                <!-- Error Message -->
+                <div id="authError" class="auth-error"></div>
+
                 <!-- Login Form -->
-                <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+                <form id="loginForm" class="auth-form active">
                     <div class="form-group">
                         <label class="form-label">Email Address</label>
                         <input type="email" class="form-control" placeholder="Enter your email" required id="loginEmail">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Password</label>
-                        <input type="password" class="form-control" placeholder="Enter your password" required id="loginPassword">
+                        <input type="password" class="form-control" placeholder="Enter your password" required id="loginPassword" minlength="6">
                     </div>
-                    
-                    <a href="#" class="forgot-link" onclick="handleForgot()">Forgot Password?</a>
-                    
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
-                    
-                    <div class="divider">OR</div>
-                    
-                    <div class="social-auth">
-                        <button type="button" class="btn-social" onclick="handleGoogle()">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" style="width: 18px;">
-                            Google
-                        </button>
-                    </div>
+                    <a href="#" class="forgot-link" id="forgotLink">Forgot Password?</a>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;" id="loginBtn">Sign In</button>
                 </form>
 
                 <!-- Sign Up Form -->
-                <form id="signupForm" class="auth-form" onsubmit="handleSignup(event)">
+                <form id="signupForm" class="auth-form">
                     <div class="form-group">
                         <label class="form-label">Full Name</label>
-                        <input type="text" class="form-control" placeholder="John Doe" required id="signupName">
+                        <input type="text" class="form-control" placeholder="John Doe" required id="signupName" minlength="2">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Email Address</label>
                         <input type="email" class="form-control" placeholder="Enter your email" required id="signupEmail">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Password</label>
-                        <input type="password" class="form-control" placeholder="Create a password" required id="signupPassword">
+                        <label class="form-label">Password (min 6 characters)</label>
+                        <input type="password" class="form-control" placeholder="Create a password" required id="signupPassword" minlength="6">
                     </div>
-                    
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Create Account</button>
-                    
-                    <div class="divider">OR</div>
-                    
-                    <div class="social-auth">
-                        <button type="button" class="btn-social" onclick="handleGoogle()">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" style="width: 18px;">
-                            Google
-                        </button>
-                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;" id="signupBtn">Create Account</button>
                 </form>
 
             </div>
         </div>
-
     </div>
 
     <!-- Tawk.to Script -->
@@ -214,34 +185,52 @@
 
     <!-- Scripts -->
     <script type="module">
-        import { login, signUp } from './auth.js';
+        import { applyGlobalSettings } from './settings.js';
+        import { login, signUp, redirectIfLoggedIn } from './auth.js';
 
-        // Tab Switcher
-        window.switchTab = function(tabId) {
-            // Update Tab UI
-            document.querySelectorAll('.auth-tab').forEach(tab => tab.classList.remove('active'));
-            const activeTab = Array.from(document.querySelectorAll('.auth-tab')).find(t => t.innerText.toLowerCase().includes(tabId));
-            if (activeTab) activeTab.classList.add('active');
-            
-            // Toggle Forms
-            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
-            if(tabId === 'login') {
-                document.getElementById('loginForm').classList.add('active');
-                document.querySelector('.auth-header h2').innerText = 'Welcome Back';
-                document.querySelector('.auth-header p').innerText = 'Please enter your details to sign in.';
-            } else {
-                document.getElementById('signupForm').classList.add('active');
-                document.querySelector('.auth-header h2').innerText = 'Create Account';
-                document.querySelector('.auth-header p').innerText = 'Start your learning journey with us.';
-            }
-        };
+        // Settings Initialization
+        applyGlobalSettings();
 
-        // Real Auth functions
-        window.handleLogin = async function(e) {
+        // Bug #15 fix: redirect if already logged in
+        redirectIfLoggedIn();
+
+        const errorEl = document.getElementById('authError');
+
+        function showError(msg) {
+            errorEl.textContent = msg;
+            errorEl.classList.add('visible');
+        }
+        function hideError() {
+            errorEl.classList.remove('visible');
+        }
+
+        // Tab Switcher — Bug fix: use event listeners instead of inline onclick
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.dataset.tab;
+                hideError();
+                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+                if (tabId === 'login') {
+                    document.getElementById('loginForm').classList.add('active');
+                    document.getElementById('authTitle').innerText = 'Welcome Back';
+                    document.getElementById('authSubtitle').innerText = 'Please enter your details to sign in.';
+                } else {
+                    document.getElementById('signupForm').classList.add('active');
+                    document.getElementById('authTitle').innerText = 'Create Account';
+                    document.getElementById('authSubtitle').innerText = 'Start your learning journey with us.';
+                }
+            });
+        });
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
+            hideError();
+            const email = document.getElementById('loginEmail').value.trim();
             const pass = document.getElementById('loginPassword').value;
-            const btn = e.target.querySelector('button');
+            const btn = document.getElementById('loginBtn');
             
             try {
                 btn.disabled = true;
@@ -249,41 +238,40 @@
                 await login(email, pass);
                 window.location.href = "dashboard.html";
             } catch (err) {
-                alert("Login Error: " + err.message);
+                showError(err.message || 'Login failed. Please try again.');
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'Sign In';
             }
-        };
+        });
 
-        window.handleSignup = async function(e) {
+        // Signup
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
+            hideError();
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
             const pass = document.getElementById('signupPassword').value;
-            const btn = e.target.querySelector('button');
+            const btn = document.getElementById('signupBtn');
             
             try {
                 btn.disabled = true;
                 btn.innerText = 'Creating account...';
                 await signUp(name, email, pass);
-                alert("Account created! Redirecting to dashboard...");
                 window.location.href = "dashboard.html";
             } catch (err) {
-                alert("Signup Error: " + err.message);
+                showError(err.message || 'Signup failed. Please try again.');
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'Create Account';
             }
-        };
+        });
 
-        window.handleForgot = function() {
-            alert("Please contact support or check your email for password recovery.");
-        };
-
-        window.handleGoogle = function() {
-            alert("Google login placeholder. Requires Supabase project configuration.");
-        };
+        // Forgot password
+        document.getElementById('forgotLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert("Please contact support at support@nishchayacademy.com for password recovery.");
+        });
     </script>
 </body>
 </html>
