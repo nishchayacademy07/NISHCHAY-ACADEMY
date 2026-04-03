@@ -67,7 +67,6 @@ export async function applyGlobalSettings() {
         if (settings.logo_url) {
             const logoContainers = document.querySelectorAll('.navbar-brand, .footer-title, .auth-logo');
             logoContainers.forEach(container => {
-                // If it contains an icon, replace the icon with an image, keeping the text
                 const icon = container.querySelector('i');
                 if (icon) {
                     const img = document.createElement('img');
@@ -80,7 +79,22 @@ export async function applyGlobalSettings() {
             });
         }
         
+        // --- CMS Content Mapping ---
+        const cmsMap = {
+            'cms-hero-title': settings.hero_title,
+            'cms-hero-subtitle': settings.hero_subtitle,
+            'cms-about-heading': settings.about_heading,
+            'cms-about-content': settings.about_content,
+            'cms-footer-text': settings.footer_text
+        };
+
+        for (const [id, value] of Object.entries(cmsMap)) {
+            const el = document.getElementById(id);
+            if (el && value) el.innerText = sanitize(value);
+        }
+        
     } catch(e) {
         console.error("Failed to apply global settings", e);
     }
 }
+
