@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Sign Up | Nishchay Academy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(225,238,255,1) 100%);
+            padding: 40px 20px;
+        }
+
+        .auth-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 450px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .auth-header {
+            text-align: center;
+            padding: 30px 20px 20px;
+        }
+        
+        .auth-logo {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .auth-body {
+            padding: 0 30px 30px;
+        }
+
+        .auth-form {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .social-auth {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-social {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: var(--radius-md);
+            background: var(--white);
+            color: var(--text-dark);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-social:hover {
+            background: #f8f9fa;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ced4da;
+        }
+
+        .divider::before {
+            margin-right: .25em;
+        }
+
+        .divider::after {
+            margin-left: .25em;
+        }
+
+        .forgot-link {
+            display: block;
+            text-align: right;
+            font-size: 0.9rem;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+        .back-to-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--text-light);
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+        
+        .back-to-home:hover {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        
+        <div class="auth-card">
+            <a href="index.html" class="back-to-home"><i class="fa-solid fa-arrow-left"></i></a>
+            
+            <div class="auth-header">
+                <div class="auth-logo"><i class="fa-solid fa-graduation-cap"></i></div>
+                <h2 style="color: var(--text-dark);">Welcome Back</h2>
+                <p style="color: var(--text-light); font-size: 0.9rem;">Please enter your details to sign in.</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchTab('login')">Login</div>
+                <div class="auth-tab" onclick="switchTab('signup')">Sign Up</div>
+            </div>
+
+            <div class="auth-body">
+                
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" placeholder="Enter your email" required id="loginEmail">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" placeholder="Enter your password" required id="loginPassword">
+                    </div>
+                    
+                    <a href="#" class="forgot-link" onclick="handleForgot()">Forgot Password?</a>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+                    
+                    <div class="divider">OR</div>
+                    
+                    <div class="social-auth">
+                        <button type="button" class="btn-social" onclick="handleGoogle()">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" style="width: 18px;">
+                            Google
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Sign Up Form -->
+                <form id="signupForm" class="auth-form" onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" placeholder="John Doe" required id="signupName">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" placeholder="Enter your email" required id="signupEmail">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" placeholder="Create a password" required id="signupPassword">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Create Account</button>
+                    
+                    <div class="divider">OR</div>
+                    
+                    <div class="social-auth">
+                        <button type="button" class="btn-social" onclick="handleGoogle()">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" style="width: 18px;">
+                            Google
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Tab Switcher
+        function switchTab(tabId) {
+            // Update Tab UI
+            document.querySelectorAll('.auth-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Toggle Forms
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            if(tabId === 'login') {
+                document.getElementById('loginForm').classList.add('active');
+                document.querySelector('.auth-header h2').innerText = 'Welcome Back';
+                document.querySelector('.auth-header p').innerText = 'Please enter your details to sign in.';
+            } else {
+                document.getElementById('signupForm').classList.add('active');
+                document.querySelector('.auth-header h2').innerText = 'Create Account';
+                document.querySelector('.auth-header p').innerText = 'Start your learning journey with us.';
+            }
+        }
+
+        // Empty backend functions
+        function handleLogin(e) {
+            e.preventDefault();
+            console.log("Login logic here");
+            // Mock direct to dashboard
+            window.location.href = "dashboard.html";
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            console.log("Signup logic here");
+            // Mock direct to dashboard
+            window.location.href = "dashboard.html";
+        }
+
+        function handleForgot() {
+            console.log("Forgot password logic here");
+            alert("Forgot Password functionality will be available via backend.");
+        }
+
+        function handleGoogle() {
+            console.log("Google Auth logic here");
+            alert("Google Sign in requires backend setup.");
+        }
+    </script>
+</body>
+</html>
