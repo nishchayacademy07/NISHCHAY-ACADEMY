@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses | Nishchay Academy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: var(--white);
+            border: 2px solid #e9ecef;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--white);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">
+                <i class="fa-solid fa-graduation-cap"></i> Nishchay Academy
+            </a>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="courses.html" class="active">Courses</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html" class="btn btn-primary" style="color: white;">Login / Sign Up</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="section" style="background-color: var(--primary-color); color: white; padding: 60px 0; text-align: center;">
+        <div class="container">
+            <h1 style="color: white; font-size: 2.5rem; margin-bottom: 10px;">Our Courses</h1>
+            <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Discover a wide range of courses designed to help you excel in your academics and competitive exams.</p>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="section section-bg">
+        <div class="container">
+            
+            <!-- Filters -->
+            <div class="filter-container">
+                <button class="filter-btn active" onclick="filterCourses('all')">All Subjects</button>
+                <button class="filter-btn" onclick="filterCourses('mathematics')">Mathematics</button>
+                <button class="filter-btn" onclick="filterCourses('science')">Science</button>
+                <button class="filter-btn" onclick="filterCourses('cs')">Computer Science</button>
+                <button class="filter-btn" onclick="filterCourses('competitive')">Competitive</button>
+            </div>
+
+            <!-- Course Grid -->
+            <div class="grid-3">
+                <!-- Course 1 -->
+                <div class="card course-card">
+                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb" alt="Mathematics" class="course-img">
+                    <div class="course-content">
+                        <span class="course-badge">Mathematics</span>
+                        <h3 class="card-title">Advanced Mathematics Mastery</h3>
+                        <p class="card-text">Master complex mathematical concepts with comprehensive problem-solving techniques.</p>
+                        <div class="course-price-row">
+                            <span class="course-price">₹2,999</span>
+                            <a href="#" class="btn btn-primary" onclick="enrollCourse('c1')">Enroll Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 2 -->
+                <div class="card course-card">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d" alt="Science" class="course-img">
+                    <div class="course-content">
+                        <span class="course-badge">Science</span>
+                        <h3 class="card-title">Complete Science Foundation</h3>
+                        <p class="card-text">Build a strong foundation in Physics, Chemistry, and Biology.</p>
+                        <div class="course-price-row">
+                            <span class="course-price">₹3,499</span>
+                            <a href="#" class="btn btn-primary" onclick="enrollCourse('c2')">Enroll Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 3 -->
+                <div class="card course-card">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3" alt="CS" class="course-img">
+                    <div class="course-content">
+                        <span class="course-badge">Computer Science</span>
+                        <h3 class="card-title">Competitive Programming</h3>
+                        <p class="card-text">Learn algorithms and data structures to ace coding interviews and competitions.</p>
+                        <div class="course-price-row">
+                            <span class="course-price">₹4,999</span>
+                            <a href="#" class="btn btn-primary" onclick="enrollCourse('c3')">Enroll Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 4 -->
+                <div class="card course-card">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173" alt="JEE" class="course-img">
+                    <div class="course-content">
+                        <span class="course-badge">Competitive</span>
+                        <h3 class="card-title">JEE Mains Target Batch</h3>
+                        <p class="card-text">Intensive preparation batch focused on JEE Mains with regular mock tests.</p>
+                        <div class="course-price-row">
+                            <span class="course-price">₹8,999</span>
+                            <a href="#" class="btn btn-primary" onclick="enrollCourse('c4')">Enroll Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 5 -->
+                <div class="card course-card">
+                    <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d" alt="NEET" class="course-img">
+                    <div class="course-content">
+                        <span class="course-badge">Competitive</span>
+                        <h3 class="card-title">NEET Crash Course</h3>
+                        <p class="card-text">Quick revision and strategic preparation for NEET aspirants.</p>
+                        <div class="course-price-row">
+                            <span class="course-price">₹7,999</span>
+                            <a href="#" class="btn btn-primary" onclick="enrollCourse('c5')">Enroll Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 6 -->
+                <div class="card course-card">
+                    <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904" alt="Physics" class="course-img">
+                    <div class="course-content">
+                        <span class="course-badge">Science</span>
+                        <h3 class="card-title">Concept of Physics</h3>
+                        <p class="card-text">Deep dive into mechanics, electromagnetism, and modern physics.</p>
+                        <div class="course-price-row">
+                            <span class="course-price">₹2,499</span>
+                            <a href="#" class="btn btn-primary" onclick="enrollCourse('c6')">Enroll Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3 class="footer-title">
+                        <i class="fa-solid fa-graduation-cap"></i> Nishchay Academy
+                    </h3>
+                    <p style="margin-bottom: 20px;">Empowering students with quality education and guidance to excel in their academic journeys.</p>
+                </div>
+                <div>
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Nishchay Academy. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/TO_BE_ADDED_LATER" class="whatsapp-btn" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script>
+        // Nav toggle
+        document.getElementById('navToggle').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        // Filter logic (Frontend only placeholder implementation)
+        function filterCourses(category) {
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Note: In a real app, this would hide/show courses based on category
+        }
+
+        // Empty backend function
+        function enrollCourse(courseId) {
+            // Logic for DB connection here
+            console.log("Enrolling in course: " + courseId);
+        }
+    </script>
+</body>
+</html>
