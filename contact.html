@@ -156,25 +156,48 @@
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
+    <!-- Tawk.to Script -->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/69cf86d453d34c1c35ed8d3a/1jl9ba368';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+
     <!-- Scripts -->
     <script>
         document.getElementById('navToggle').addEventListener('click', function() {
             document.getElementById('navLinks').classList.toggle('active');
         });
 
-        // Empty functions for backend
+        // Contact Form Submission
         function submitContactForm(event) {
             event.preventDefault();
-            console.log("Contact form submitted!");
-            // Backend integration goes here
-            alert("Thank you for your message. We will get back to you soon!");
-            event.target.reset();
+            const btn = event.target.querySelector('button');
+            btn.disabled = true;
+            btn.innerText = 'Sending...';
+            
+            // Mock success for now as no backend endpoint was defined for contact leads
+            setTimeout(() => {
+                alert("Thank you for your message. We will get back to you soon!");
+                event.target.reset();
+                btn.disabled = false;
+                btn.innerText = 'Send Message';
+            }, 1000);
         }
 
+        // Live Chat Trigger
         function startLiveChat() {
-            // Live chat popup integration logic goes here
-            console.log("Opening live chat widget...");
-            alert("Live chat feature will be activated shortly.");
+            if (typeof Tawk_API !== 'undefined' && Tawk_API.maximize) {
+                Tawk_API.maximize();
+            } else {
+                alert("Live chat is loading. Please wait a moment...");
+            }
         }
     </script>
 </body>
