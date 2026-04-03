@@ -88,9 +88,10 @@ CREATE POLICY "Allow insert on signup"
 -- RLS POLICIES: courses
 -- ============================================================
 
--- Anyone (authenticated) can read all courses
+-- Anyone (authenticated or anon) can read all courses
 CREATE POLICY "Anyone can view courses"
   ON public.courses FOR SELECT
+  TO public
   USING (true);
 
 -- Only admins can insert courses
@@ -158,3 +159,48 @@ CREATE POLICY "Admins can view all enrollments"
 -- ============================================================
 
 -- UPDATE public.users SET role = 'admin' WHERE email = 'admin@nishchayacademy.com';
+
+-- ============================================================
+-- SITE SETTINGS
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS public.site_settings (
+  id INT PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+  logo_url TEXT,
+  primary_color TEXT DEFAULT '#0d6efd',
+  whatsapp_number TEXT DEFAULT '919876543210',
+  contact_email TEXT DEFAULT 'hello@nishchayacademy.com'
+);
+
+ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
+
+-- Anyone can view settings
+CREATE POLICY "Anyone can view settings"
+  ON public.site_settings FOR SELECT
+  TO public
+  USING (true);
+
+-- Only admins can update settings
+CREATE POLICY "Admins can update settings"
+  ON public.site_settings FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.users u
+      WHERE u.id = auth.uid() AND u.role = 'admin'
+    )
+  );
+  
+-- Only admins can insert settings (for initializing the first row row if needed)  
+CREATE POLICY "Admins can insert settings"
+  ON public.site_settings FOR INSERT
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM public.users u
+      WHERE u.id = auth.uid() AND u.role = 'admin'
+    )
+  );
+
+-- Insert default settings row if it doesn't exist
+INSERT INTO public.site_settings (id, logo_url, primary_color, whatsapp_number, contact_email) 
+VALUES (1, '', '#0d6efd', '919876543210', 'hello@nishchayacademy.com')
+ON CONFLICT (id) DO NOTHING;
