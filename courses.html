@@ -14,7 +14,6 @@
             margin-bottom: 40px;
             flex-wrap: wrap;
         }
-        
         .filter-btn {
             background: var(--white);
             border: 2px solid #e9ecef;
@@ -22,10 +21,10 @@
             border-radius: 20px;
             cursor: pointer;
             font-weight: 500;
+            font-family: inherit;
             color: var(--text-light);
             transition: var(--transition);
         }
-        
         .filter-btn:hover, .filter-btn.active {
             background: var(--primary-color);
             border-color: var(--primary-color);
@@ -65,19 +64,17 @@
     <!-- Courses Section -->
     <section class="section section-bg">
         <div class="container">
-            
-            <!-- Filters -->
-            <div class="filter-container">
-                <button class="filter-btn active" onclick="filterCourses('all')">All Subjects</button>
-                <button class="filter-btn" onclick="filterCourses('mathematics')">Mathematics</button>
-                <button class="filter-btn" onclick="filterCourses('science')">Science</button>
-                <button class="filter-btn" onclick="filterCourses('cs')">Computer Science</button>
-                <button class="filter-btn" onclick="filterCourses('competitive')">Competitive</button>
+            <!-- Bug #2 fix: filter values now match exact DB values (case-insensitive via ilike in courses.js) -->
+            <div class="filter-container" id="filterContainer">
+                <button class="filter-btn active" data-filter="all">All Subjects</button>
+                <button class="filter-btn" data-filter="Mathematics">Mathematics</button>
+                <button class="filter-btn" data-filter="Science">Science</button>
+                <button class="filter-btn" data-filter="Computer Science">Computer Science</button>
+                <button class="filter-btn" data-filter="Competitive">Competitive</button>
             </div>
 
             <!-- Course Grid -->
             <div id="courseGrid" class="grid-3">
-                <!-- Dynamically loaded -->
                 <p style="color: var(--text-light); text-align: center; grid-column: 1/-1;">Loading courses...</p>
             </div>
         </div>
@@ -110,7 +107,7 @@
     </footer>
 
     <!-- WhatsApp Button -->
-    <a href="https://wa.me/TO_BE_ADDED_LATER" class="whatsapp-btn" target="_blank" rel="noopener noreferrer">
+    <a href="https://wa.me/919876543210" class="whatsapp-btn" target="_blank" rel="noopener noreferrer">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
@@ -129,9 +126,13 @@
 
     <!-- Scripts -->
     <script type="module">
+        import { applyGlobalSettings } from './settings.js';
         import { getAllCourses, filterBySubject } from './courses.js';
         import { enrollStudent } from './enrollment.js';
-        import { getSession } from './auth.js';
+        import { getSession, sanitize } from './auth.js';
+
+        // Settings Initialization
+        applyGlobalSettings();
 
         const courseGrid = document.getElementById('courseGrid');
 
@@ -140,46 +141,60 @@
             document.getElementById('navLinks').classList.toggle('active');
         });
 
-        // Display Courses
+        // Bug #8 fix: sanitize all course data before rendering
         function displayCourses(courses) {
             if (!courses || courses.length === 0) {
-                courseGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">No courses found.</p>';
+                courseGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: var(--text-light);">No courses found.</p>';
                 return;
             }
-
-            courseGrid.innerHTML = courses.map(course => `
+            courseGrid.innerHTML = courses.map(course => {
+                const safeTitle = sanitize(course.title);
+                const safeDesc = sanitize(course.description);
+                const safeSubject = sanitize(course.subject);
+                const safeImg = course.image_url ? sanitize(course.image_url) : 'https://placehold.co/400x200?text=No+Image';
+                return `
                 <div class="card course-card">
-                    <img src="${course.image_url || 'https://via.placeholder.com/400x200?text=No+Image'}" alt="${course.title}" class="course-img">
+                    <img src="${safeImg}" alt="${safeTitle}" class="course-img" onerror="this.src='https://placehold.co/400x200?text=No+Image'">
                     <div class="course-content">
-                        <span class="course-badge">${course.subject}</span>
-                        <h3 class="card-title">${course.title}</h3>
-                        <p class="card-text">${course.description}</p>
+                        <span class="course-badge">${safeSubject}</span>
+                        <h3 class="card-title">${safeTitle}</h3>
+                        <p class="card-text">${safeDesc}</p>
                         <div class="course-price-row">
-                            <span class="course-price">₹${course.price}</span>
-                            <button class="btn btn-primary" onclick="enrollCourse('${course.id}')">Enroll Now</button>
+                            <span class="course-price">₹${parseFloat(course.price || 0).toLocaleString('en-IN')}</span>
+                            <button class="btn btn-primary enroll-btn" data-course-id="${course.id}">Enroll Now</button>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
+
+            // Bug #16 fix: attach event listeners properly instead of using inline onclick
+            courseGrid.querySelectorAll('.enroll-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    enrollCourse(this.dataset.courseId, this);
+                });
+            });
         }
 
-        // Filter logic
-        window.filterCourses = async function(category) {
-            // Update active button
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            if (event && event.target) event.target.classList.add('active');
+        // Filter logic — using event delegation instead of inline onclick
+        document.getElementById('filterContainer').addEventListener('click', async function(e) {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+            const category = btn.dataset.filter;
+
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
             
             try {
                 courseGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">Filtering...</p>';
                 const courses = await filterBySubject(category);
                 displayCourses(courses);
             } catch (err) {
-                alert("Error filtering courses: " + err.message);
+                courseGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: red;">Error filtering courses.</p>';
             }
-        };
+        });
 
-        // Enroll logic
-        window.enrollCourse = async function(courseId) {
+        // Bug #16 fix: pass button reference directly instead of relying on event.target
+        async function enrollCourse(courseId, btn) {
             try {
                 const session = await getSession();
                 if (!session) {
@@ -188,7 +203,6 @@
                     return;
                 }
 
-                const btn = event.target;
                 btn.disabled = true;
                 btn.innerText = 'Enrolling...';
 
@@ -197,13 +211,10 @@
                 window.location.href = "dashboard.html";
             } catch (err) {
                 alert("Enrollment Error: " + err.message);
-            } finally {
-                if (event && event.target) {
-                    event.target.disabled = false;
-                    event.target.innerText = 'Enroll Now';
-                }
+                btn.disabled = false;
+                btn.innerText = 'Enroll Now';
             }
-        };
+        }
 
         // Initial load
         (async () => {
@@ -211,7 +222,8 @@
                 const courses = await getAllCourses();
                 displayCourses(courses);
             } catch (err) {
-                courseGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: red;">Error loading courses.</p>';
+                courseGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: red;">Error loading courses. Please try again later.</p>';
+                console.error(err);
             }
         })();
     </script>
