@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | Nishchay Academy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: var(--bg-color);
+        }
+        
+        .topbar {
+            background-color: var(--white);
+            padding: 15px 30px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Dashboard specific layout is defined in style.css */
+        
+        .stat-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: #e1eeff;
+            color: var(--primary-color);
+        }
+        
+        .stat-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0;
+            color: var(--text-dark);
+        }
+
+        .stat-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .course-progress-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+        }
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .course-header h4 {
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                height: 100vh;
+                z-index: 1000;
+            }
+            .sidebar.active {
+                left: 0;
+                box-shadow: var(--shadow-lg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="mobile-toggle" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <a href="index.html" class="navbar-brand" style="font-size: 1.2rem;">
+                <i class="fa-solid fa-graduation-cap"></i> Nishchay Academy
+            </a>
+        </div>
+        <div class="user-menu" onclick="toggleProfileMenu()">
+            <div style="text-align: right; display: none; @media(min-width: 576px){display: block;}">
+                <p style="margin: 0; font-weight: 500; color: var(--text-dark); font-size: 0.9rem;">Student User</p>
+                <small style="color: var(--text-light);">Class 12th</small>
+            </div>
+            <div class="user-avatar">SU</div>
+            <i class="fa-solid fa-chevron-down" style="color: var(--text-light); font-size: 0.8rem;"></i>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="dashboard-layout">
+        
+        <!-- Sidebar Navigation -->
+        <div class="sidebar" id="sidebar">
+            <div style="padding: 0 20px 20px; color: var(--text-light); font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">Menu</div>
+            
+            <a href="#" class="sidebar-link active" onclick="switchSection('overview')">
+                <i class="fa-solid fa-border-all" style="width: 20px;"></i> Dashboard
+            </a>
+            <a href="#" class="sidebar-link" onclick="switchSection('courses')">
+                <i class="fa-solid fa-book-open" style="width: 20px;"></i> My Courses
+            </a>
+            <a href="#" class="sidebar-link" onclick="switchSection('tests')">
+                <i class="fa-solid fa-clipboard-list" style="width: 20px;"></i> Mock Tests
+            </a>
+            <a href="#" class="sidebar-link" onclick="switchSection('profile')">
+                <i class="fa-solid fa-user" style="width: 20px;"></i> My Profile
+            </a>
+            
+            <div style="margin-top: 50px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 20px;">
+                <a href="index.html" class="sidebar-link" style="color: #dc3545;">
+                    <i class="fa-solid fa-right-from-bracket" style="width: 20px;"></i> Logout
+                </a>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="dashboard-content">
+            
+            <!-- Welcome Header -->
+            <div style="margin-bottom: 30px;">
+                <h2 style="color: var(--text-dark); margin-bottom: 5px;">Welcome back, Student! 👋</h2>
+                <p style="color: var(--text-light);">Here's your learning progress for today.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-book"></i></div>
+                    <div class="stat-info">
+                        <h3>3</h3>
+                        <p>Enrolled Courses</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e6f9ea; color: #28a745;"><i class="fa-solid fa-check-circle"></i></div>
+                    <div class="stat-info">
+                        <h3>12</h3>
+                        <p>Completed Lessons</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fff3cd; color: #ffc107;"><i class="fa-solid fa-clock"></i></div>
+                    <div class="stat-info">
+                        <h3>24h</h3>
+                        <p>Hours Studied</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Courses Section -->
+            <div style="margin-top: 40px;">
+                <h3 style="color: var(--text-dark); margin-bottom: 20px;">Continue Learning</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    
+                    <div class="course-progress-card">
+                        <div class="course-header">
+                            <h4>Advanced Mathematics Mastery</h4>
+                            <span class="course-badge" style="margin: 0; background-color: #28a745;">In Progress</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">Next: Chapter 5 - Integration Techniques</p>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: 45%;"></div>
+                        </div>
+                        <div class="progress-text">45% Completed</div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 15px; padding: 8px;">Resume Course</button>
+                    </div>
+
+                    <div class="course-progress-card">
+                        <div class="course-header">
+                            <h4>Complete Science Foundation</h4>
+                            <span class="course-badge" style="margin: 0; background-color: #ffc107; color: #000;">Just Started</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">Next: Chapter 1 - Motion</p>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: 10%;"></div>
+                        </div>
+                        <div class="progress-text">10% Completed</div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 15px; padding: 8px;">Resume Course</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Profile Section Placeholder -->
+            <div id="profileSection" style="display: none; margin-top: 40px;">
+                <div style="background: var(--white); padding: 30px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm);">
+                    <h3 style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">My Profile</h3>
+                    <form onsubmit="event.preventDefault(); alert('Profile updated!');">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px;">
+                            <div class="form-group">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" value="Student">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" value="User">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" value="student@example.com" disabled>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function toggleProfileMenu() {
+            // Mock empty dropdown toggle
+            console.log("Profile menu toggled");
+        }
+
+        function switchSection(sectionParams) {
+            // Remove active classes
+            document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            if(sectionParams === 'profile') {
+                // Show profile form, hide cards
+                document.querySelectorAll('.stat-card').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.course-progress-card').forEach(el => el.style.display = 'none');
+                document.getElementById('profileSection').style.display = 'block';
+            } else {
+                // Reset dashboard view
+                document.querySelectorAll('.stat-card').forEach(el => el.style.display = 'flex');
+                document.querySelectorAll('.course-progress-card').forEach(el => el.style.display = 'block');
+                document.getElementById('profileSection').style.display = 'none';
+            }
+            
+            // On mobile, close sidebar after click
+            if(window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
