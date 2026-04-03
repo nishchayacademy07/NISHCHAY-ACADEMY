@@ -66,6 +66,9 @@ DO $$ BEGIN
     
     DROP POLICY IF EXISTS "Admins can view all users" ON public.users;
     CREATE POLICY "Admins can view all users" ON public.users FOR SELECT USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+    
+    DROP POLICY IF EXISTS "Users can insert their own profile" ON public.users;
+    CREATE POLICY "Users can insert their own profile" ON public.users FOR INSERT WITH CHECK (auth.uid() = id);
 END $$;
 
 -- COURSES POLICIES
@@ -106,6 +109,22 @@ END $$;
 INSERT INTO public.site_settings (id, logo_url, primary_color, whatsapp_number, contact_email) 
 VALUES (1, '', '#0d6efd', '919876543210', 'hello@nishchayacademy.com')
 ON CONFLICT (id) DO NOTHING;
+
+-- ============================================================
+-- RPC FUNCTIONS
+-- ============================================================
+CREATE OR REPLACE FUNCTION public.get_user_count()
+RETURNS integer
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  total integer;
+BEGIN
+  SELECT count(*) INTO total FROM public.users;
+  RETURN total;
+END;
+$$;
 
 -- ============================================================
 -- 🔑 HOW TO BECOME AN ADMIN
