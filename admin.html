@@ -62,6 +62,51 @@
             .sidebar { position: fixed; left: -250px; height: 100vh; z-index: 1000; }
             .sidebar.active { left: 0; box-shadow: var(--shadow-lg); }
         }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        /* Premium Site Settings Card */
+        .settings-preview {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
@@ -226,37 +271,125 @@
             <!-- Site Settings Section -->
             <div id="section-settings" class="admin-section">
                 <h2 style="color: var(--text-dark); margin-bottom: 20px;">Global Site Settings</h2>
-                <div class="card" style="max-width: 800px;">
-                    <form id="siteSettingsForm">
-                        <div class="form-group">
-                            <label class="form-label">Site Logo (Upload via Cloudinary)</label>
-                            <div class="file-upload-wrapper" id="logoUploadWrapper">
-                                <input type="file" accept="image/*" id="siteLogoInput">
-                                <i class="fa-solid fa-image" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                                <span id="logoUploadText">Click to Change Logo</span>
-                            </div>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <p style="color: var(--text-light); margin-bottom: 30px;">Control your academy's brand identity, contact information, and global theme colors from this panel.</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px; align-items: flex-start;">
+                    <div class="card" style="margin: 0;">
+                        <h3 style="margin-bottom: 20px; font-size: 1.1rem; border-bottom: 1px solid #eee; padding-bottom: 15px;">Configuration</h3>
+                        <form id="siteSettingsForm">
                             <div class="form-group">
-                                <label class="form-label">Theme Color (Primary)</label>
-                                <input type="color" id="sitePrimaryColor" class="form-control" style="height: 50px; cursor: pointer;">
+                                <label class="form-label">Academy Logo</label>
+                                <div class="file-upload-wrapper" id="logoUploadWrapper">
+                                    <input type="file" accept="image/*" id="siteLogoInput">
+                                    <i class="fa-solid fa-image" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                                    <span id="logoUploadText">Click to Change Logo</span>
+                                </div>
+                                <small style="display:block; margin-top:5px; color: #666;">Recommended: Transparent PNG, 200x50px</small>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div class="form-group">
+                                    <label class="form-label">Brand Color</label>
+                                    <input type="color" id="sitePrimaryColor" class="form-control" style="height: 50px; cursor: pointer; padding: 5px;">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Support WhatsApp</label>
+                                    <input type="text" id="siteWhatsapp" class="form-control" placeholder="E.g. 919876543210">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Official Contact Email</label>
+                                <input type="email" id="siteContactEmail" class="form-control" placeholder="hello@nishchayacademy.com">
+                            </div>
+
+                            <h3 style="margin: 25px 0 15px; font-size: 1.1rem; border-bottom: 1px solid #eee; padding-bottom: 15px;">Homepage Content (CMS)</h3>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Hero Banner Title</label>
+                                <input type="text" id="siteHeroTitle" class="form-control" placeholder="Main heading on homepage">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">WhatsApp Number</label>
-                                <input type="text" id="siteWhatsapp" class="form-control" placeholder="E.g. 919876543210 (include country code)">
+                                <label class="form-label">Hero Banner Subtitle</label>
+                                <textarea id="siteHeroSubtitle" class="form-control" style="min-height: 80px;" placeholder="Sub-heading below title"></textarea>
                             </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px;">
+                                <div class="form-group">
+                                    <label class="form-label">About Us Heading</label>
+                                    <input type="text" id="siteAboutHeading" class="form-control" placeholder="Heading for about section">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">About Us Content</label>
+                                    <textarea id="siteAboutContent" class="form-control" style="min-height: 120px;" placeholder="Full text for about section"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                                <button type="submit" class="btn btn-primary" id="saveSettingsBtn" style="width: 100%;">Apply Changes Platform-Wide</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card" style="margin: 0;">
+                        <h3 style="margin-bottom: 20px; font-size: 1.1rem; border-bottom: 1px solid #eee; padding-bottom: 15px;">Theme Preview</h3>
+                        <div id="settingsPreviewArea">
+                             <div class="settings-preview">
+                                <div id="previewColorBox" style="width: 40px; height: 40px; border-radius: 8px; background: var(--primary-color);"></div>
+                                <div>
+                                    <div style="font-weight: 600; font-size: 0.9rem;">Primary Theme</div>
+                                    <div id="previewColorHex" style="font-size: 0.8rem; color: #666;">#0d6efd</div>
+                                </div>
+                             </div>
+                             <div style="background: #f8f9fa; padding: 15px; border-radius: var(--radius-md); border: 1px solid #eee;">
+                                <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 10px;">Button Preview</div>
+                                <button class="btn btn-primary" style="width: 100%; pointer-events: none;">Example Button</button>
+                             </div>
+                             <div style="margin-top: 20px; display: flex; align-items: center; gap: 10px; color: var(--text-light); font-size: 0.85rem;">
+                                <i class="fa-solid fa-circle-info"></i>
+                                <span>Changes apply instantly to all student and public pages.</span>
+                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Contact Email</label>
-                            <input type="email" id="siteContactEmail" class="form-control" placeholder="hello@nishchayacademy.com">
-                        </div>
-                        <div style="margin-top: 20px;">
-                            <button type="submit" class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
 
+        </div>
+        </div>
+    </div>
+
+    <!-- Edit Course Modal -->
+    <div id="editCourseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeEditModal">&times;</span>
+            <h3 style="margin-bottom: 20px;">Edit Course</h3>
+            <form id="editCourseForm">
+                <input type="hidden" id="editCourseId">
+                <div class="form-group">
+                    <label class="form-label">Course Title</label>
+                    <input type="text" id="editCourseTitle" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select id="editCourseCategory" class="form-control" required>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Science">Science</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Competitive">Competitive Exams</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Price (₹)</label>
+                    <input type="number" id="editCoursePrice" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="editCourseDesc" class="form-control" required></textarea>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" id="saveEditBtn">Update Course</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -278,11 +411,7 @@
         import { applyGlobalSettings, getSiteSettings, updateSiteSettings } from './settings.js';
         import { redirectIfNotAdmin, logout, sanitize } from './auth.js';
         import { getAllStudents, getDashboardStats, deleteStudent } from './admin.js';
-        
-        // Settings Initialization
-        applyGlobalSettings();
-
-        import { getAllCourses, addCourse, deleteCourse } from './courses.js';
+        import { getAllCourses, addCourse, deleteCourse, getCourseById, editCourse } from './courses.js';
         import { uploadImage } from './upload.js';
 
         let selectedFile = null;
@@ -370,10 +499,27 @@
                         <td><span class="course-badge" style="margin:0;">${sanitize(c.subject)}</span></td>
                         <td>₹${parseFloat(c.price || 0).toLocaleString('en-IN')}</td>
                         <td>
+                            <button class="action-btn btn-edit edit-course-btn" data-id="${c.id}"><i class="fa-solid fa-pen-to-square"></i></button>
                             <button class="action-btn btn-delete delete-course-btn" data-id="${c.id}"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `).join('');
+
+                // Attach edit handlers
+                tbody.querySelectorAll('.edit-course-btn').forEach(btn => {
+                    btn.addEventListener('click', async function() {
+                        const id = this.dataset.id;
+                        try {
+                            const course = await getCourseById(id);
+                            document.getElementById('editCourseId').value = course.id;
+                            document.getElementById('editCourseTitle').value = course.title;
+                            document.getElementById('editCourseCategory').value = course.subject;
+                            document.getElementById('editCoursePrice').value = course.price;
+                            document.getElementById('editCourseDesc').value = course.description;
+                            document.getElementById('editCourseModal').classList.add('active');
+                        } catch (err) { alert('Failed to load course details: ' + err.message); }
+                    });
+                });
 
                 // Attach delete handlers
                 tbody.querySelectorAll('.delete-course-btn').forEach(btn => {
@@ -462,6 +608,34 @@
             }
         });
 
+        // --- Edit Course Logic ---
+        document.getElementById('closeEditModal').addEventListener('click', () => {
+            document.getElementById('editCourseModal').classList.remove('active');
+        });
+
+        document.getElementById('editCourseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('editCourseId').value;
+            const btn = document.getElementById('saveEditBtn');
+            try {
+                btn.disabled = true;
+                btn.innerText = 'Updating...';
+                await editCourse(id, {
+                    title: document.getElementById('editCourseTitle').value,
+                    subject: document.getElementById('editCourseCategory').value,
+                    price: document.getElementById('editCoursePrice').value,
+                    description: document.getElementById('editCourseDesc').value
+                });
+                alert("Course updated successfully!");
+                document.getElementById('editCourseModal').classList.remove('active');
+                loadCourses();
+            } catch (err) { alert("Error: " + err.message); }
+            finally {
+                btn.disabled = false;
+                btn.innerText = 'Update Course';
+            }
+        });
+
         // --- Site Settings Integration ---
         let selectedLogoFile = null;
 
@@ -473,13 +647,33 @@
         async function loadSiteSettings() {
             try {
                 const settings = await getSiteSettings();
-                document.getElementById('sitePrimaryColor').value = settings.primary_color || '#0d6efd';
+                const primaryColor = settings.primary_color || '#0d6efd';
+                document.getElementById('sitePrimaryColor').value = primaryColor;
                 document.getElementById('siteWhatsapp').value = settings.whatsapp_number || '';
                 document.getElementById('siteContactEmail').value = settings.contact_email || '';
+                
+                // CMS Fields
+                document.getElementById('siteHeroTitle').value = settings.hero_title || '';
+                document.getElementById('siteHeroSubtitle').value = settings.hero_subtitle || '';
+                document.getElementById('siteAboutHeading').value = settings.about_heading || '';
+                document.getElementById('siteAboutContent').value = settings.about_content || '';
+
+                // Update preview
+                document.getElementById('previewColorBox').style.background = primaryColor;
+                document.getElementById('previewColorHex').innerText = primaryColor;
             } catch (err) {
                 console.error("Failed to load settings:", err);
             }
         }
+
+        // Real-time Color Preview
+        document.getElementById('sitePrimaryColor').addEventListener('input', function(e) {
+            const color = e.target.value;
+            document.getElementById('previewColorBox').style.background = color;
+            document.getElementById('previewColorHex').innerText = color;
+            // Apply to live UI for instant feedback
+            document.documentElement.style.setProperty('--primary-color', color);
+        });
 
         document.getElementById('siteSettingsForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -497,7 +691,11 @@
                 const updates = {
                     primary_color: document.getElementById('sitePrimaryColor').value,
                     whatsapp_number: document.getElementById('siteWhatsapp').value,
-                    contact_email: document.getElementById('siteContactEmail').value
+                    contact_email: document.getElementById('siteContactEmail').value,
+                    hero_title: document.getElementById('siteHeroTitle').value,
+                    hero_subtitle: document.getElementById('siteHeroSubtitle').value,
+                    about_heading: document.getElementById('siteAboutHeading').value,
+                    about_content: document.getElementById('siteAboutContent').value
                 };
 
                 if (logoUrl) {
