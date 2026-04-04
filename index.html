@@ -518,7 +518,7 @@
         const grid = document.querySelector('.toppers-grid') || document.getElementById('toppers-grid');
         if(grid) {
           grid.innerHTML = toppers.map(t => `
-            <div class="topper-card reveal fade-up">
+            <div class="topper-card">
               <div class="topper-img-wrap">
                 ${t.image_url ? `<img src="${t.image_url}" alt="${t.name}">` : `<div class="avatar-placeholder av-gold" style="font-size:3rem;">${t.name.charAt(0)}</div>`}
                 <div class="topper-rank">${t.rank}</div>
@@ -560,7 +560,7 @@
         const fGrid = document.querySelector('.faculty-grid');
         if (fGrid) {
           fGrid.innerHTML = faculty.map(f => `
-            <div class="faculty-card reveal fade-up">
+            <div class="faculty-card">
               ${f.image_url ? `<img src="${f.image_url}" alt="${f.name}">` : `<div style="height:320px; background:var(--dark3); display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-user" style="font-size:4rem; color:var(--dark4);"></i></div>`}
               <div class="faculty-info">
                 <div class="faculty-name">${f.name}</div>
