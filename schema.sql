@@ -21,21 +21,21 @@ CREATE TABLE IF NOT EXISTS public.users (
 -- STORAGE SETUP (BUCKET FIX)
 -- ============================================================
 INSERT INTO storage.buckets (id, name, public) 
-VALUES ('public', 'public', true) 
+VALUES ('media', 'media', true) 
 ON CONFLICT (id) DO NOTHING;
 
 DO $$ BEGIN
-    DROP POLICY IF EXISTS "Public access to public bucket" ON storage.objects;
-    CREATE POLICY "Public access to public bucket" ON storage.objects FOR SELECT USING (bucket_id = 'public');
+    DROP POLICY IF EXISTS "Public access to media bucket" ON storage.objects;
+    CREATE POLICY "Public access to media bucket" ON storage.objects FOR SELECT USING (bucket_id = 'media');
     
-    DROP POLICY IF EXISTS "Admins can upload to public bucket" ON storage.objects;
-    CREATE POLICY "Admins can upload to public bucket" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'public' AND EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+    DROP POLICY IF EXISTS "Admins can upload to media bucket" ON storage.objects;
+    CREATE POLICY "Admins can upload to media bucket" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'media' AND EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
     
-    DROP POLICY IF EXISTS "Admins can update public bucket" ON storage.objects;
-    CREATE POLICY "Admins can update public bucket" ON storage.objects FOR UPDATE USING (bucket_id = 'public' AND EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+    DROP POLICY IF EXISTS "Admins can update media bucket" ON storage.objects;
+    CREATE POLICY "Admins can update media bucket" ON storage.objects FOR UPDATE USING (bucket_id = 'media' AND EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
     
-    DROP POLICY IF EXISTS "Admins can delete public bucket" ON storage.objects;
-    CREATE POLICY "Admins can delete public bucket" ON storage.objects FOR DELETE USING (bucket_id = 'public' AND EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+    DROP POLICY IF EXISTS "Admins can delete media bucket" ON storage.objects;
+    CREATE POLICY "Admins can delete media bucket" ON storage.objects FOR DELETE USING (bucket_id = 'media' AND EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
 END $$;
 
 -- 2. COURSES TABLE
