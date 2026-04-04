@@ -9,23 +9,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="pinnacle.css">
+<script>
+  if (localStorage.getItem('theme') === 'light' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+    document.documentElement.classList.add('light-mode');
+  }
+</script>
 </head>
 <body>
 
 <!-- NAVBAR -->
 <nav id="mainNav">
-  <a href="index.html" class="nav-logo" id="cms-branding">Nishchay<span> Academy</span></a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#toppers">Toppers</a></li>
-    <li><a href="#courses">Courses</a></li>
-    <li><a href="#testimonials">Reviews</a></li>
-    <li><a href="#faculty">Faculty</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a href="#contact" class="nav-cta">Schedule Demo</a>
-  <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">
-    <i class="fa-solid fa-bars"></i>
-  </button>
+  <a href="index.html" class="nav-logo" id="cms-nav-logo">Nishchay<span> Academy</span></a>
+  <div style="display: flex; align-items: center; gap: 1.5rem;">
+    <button id="themeToggleBtn" style="background:transparent; border:none; color:var(--text); font-size:1.2rem; cursor:pointer; padding: 0.5rem;"><i class="fa-solid fa-moon" id="themeIcon"></i></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#courses">Courses</a></li>
+      <li><a href="#toppers">Toppers</a></li>
+      <li><a href="#faculty">Faculty</a></li>
+      <li><a href="#contact" class="nav-cta">Schedule Demo</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -632,6 +636,21 @@
       btn.disabled = false;
     }
   };
+
+  // Theme Toggle
+  const themeToggle = document.getElementById('themeToggleBtn');
+  const themeIcon = document.getElementById('themeIcon');
+  if(themeToggle) {
+    if(document.documentElement.classList.contains('light-mode')) {
+      themeIcon.classList.replace('fa-moon', 'fa-sun');
+    }
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('light-mode');
+      const isLight = document.documentElement.classList.contains('light-mode');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      themeIcon.className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    });
+  }
 </script>
 </body>
 </html>
