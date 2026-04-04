@@ -1,3 +1,15 @@
+html.light-mode {
+  --dark: #F8FAFC;
+  --dark2: #FFFFFF;
+  --dark3: #F1F5F9;
+  --card: rgba(255,255,255,0.8);
+  --text: #334155;
+  --muted: #64748B;
+  --heading-color: #0F172A;
+  --border-dim: rgba(0,0,0,0.08);
+  --border-med: rgba(0,0,0,0.15);
+}
+
 :root {
   --gold: #C9A84C;
   --gold-light: #E8C96A;
@@ -13,7 +25,10 @@
   --radius-md: 8px;
   --radius-lg: 16px;
   --shadow-lg: 0 20px 50px rgba(0,0,0,0.5);
-  --primary-color: var(--gold); /* Compatible with previous code */
+  --primary-color: var(--gold);
+  --heading-color: #fff;
+  --border-dim: rgba(255,255,255,0.07);
+  --border-med: rgba(255,255,255,0.15);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -108,7 +123,7 @@ h1 {
   font-size: clamp(2.8rem, 6vw, 5.2rem);
   line-height: 1.08;
   font-weight: 900;
-  color: #fff;
+  color: var(--heading-color);
   margin-bottom: 1.5rem;
 }
 h1 em { font-style: italic; color: var(--gold); }
@@ -132,7 +147,7 @@ h1 em { font-style: italic; color: var(--gold); }
 .btn-ghost {
   background: transparent; color: var(--text);
   padding: 0.85rem 2rem;
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid var(--border-med);
   font-family: 'DM Sans', sans-serif;
   font-weight: 500; font-size: 0.95rem;
   cursor: pointer; border-radius: 6px;
@@ -150,7 +165,7 @@ section { padding: 6rem 5%; }
 .section-title {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 900; color: #fff;
+  font-weight: 900; color: var(--heading-color);
   margin-bottom: 1rem; line-height: 1.15;
 }
 .section-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 500px; }
@@ -182,7 +197,7 @@ section { padding: 6rem 5%; }
 }
 .course-card {
   background: var(--card);
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid var(--border-dim);
   border-radius: 16px; padding: 2rem;
   transition: all 0.3s; cursor: pointer;
   position: relative; overflow: hidden;
@@ -198,14 +213,14 @@ section { padding: 6rem 5%; }
 /* FOOTER */
 footer {
   background: #080810;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid var(--border-dim);
   padding: 3rem 5% 2rem;
 }
 .footer-top {
   display: flex; justify-content: space-between;
   gap: 2rem; flex-wrap: wrap;
   padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid var(--border-dim);
   margin-bottom: 2rem;
 }
 
