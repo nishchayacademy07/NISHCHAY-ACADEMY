@@ -519,14 +519,14 @@
         if(grid) {
           grid.innerHTML = toppers.map(t => `
             <div class="topper-card reveal fade-up">
-              <div class="topper-img">
-                <img src="${t.image_url || ''}" alt="${t.name}">
+              <div class="topper-img-wrap">
+                ${t.image_url ? `<img src="${t.image_url}" alt="${t.name}">` : `<div class="avatar-placeholder av-gold" style="font-size:3rem;">${t.name.charAt(0)}</div>`}
                 <div class="topper-rank">${t.rank}</div>
               </div>
-              <div class="topper-info">
+              <div class="topper-body">
                 <div class="topper-name">${t.name}</div>
                 <div class="topper-exam">${t.exam}</div>
-                <div class="topper-score">Score: ${t.score}</div>
+                <div class="topper-score">${t.score}</div>
                 <div class="topper-year">${t.year_info || ''}</div>
               </div>
             </div>
