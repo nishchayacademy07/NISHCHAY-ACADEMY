@@ -29,13 +29,13 @@ DO $$ BEGIN
     CREATE POLICY "Public access to media bucket" ON storage.objects FOR SELECT USING (bucket_id = 'media');
     
     DROP POLICY IF EXISTS "Admins can upload to media bucket" ON storage.objects;
-    CREATE POLICY "Admins can upload to media bucket" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'media' AND EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+    CREATE POLICY "Admins can upload to media bucket" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'media' AND auth.role() = 'authenticated');
     
     DROP POLICY IF EXISTS "Admins can update media bucket" ON storage.objects;
-    CREATE POLICY "Admins can update media bucket" ON storage.objects FOR UPDATE USING (bucket_id = 'media' AND EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+    CREATE POLICY "Admins can update media bucket" ON storage.objects FOR UPDATE USING (bucket_id = 'media' AND auth.role() = 'authenticated');
     
     DROP POLICY IF EXISTS "Admins can delete media bucket" ON storage.objects;
-    CREATE POLICY "Admins can delete media bucket" ON storage.objects FOR DELETE USING (bucket_id = 'media' AND EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+    CREATE POLICY "Admins can delete media bucket" ON storage.objects FOR DELETE USING (bucket_id = 'media' AND auth.role() = 'authenticated');
 END $$;
 
 -- 2. COURSES TABLE
