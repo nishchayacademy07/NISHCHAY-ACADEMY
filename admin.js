@@ -34,6 +34,9 @@ async function initAdmin() {
   loadCourses();
   loadStudents();
   loadSettings();
+  loadEnquiries();
+  loadGallery();
+  loadFaculty();
 }
 
 // ── NAVIGATION ─────────────────────────────────────────────
@@ -315,3 +318,148 @@ $('saveContactBtn').addEventListener('click', async () => {
 
 // INIT
 initAdmin();
+
+// ── ENQUIRIES ──────────────────────────────────────────────
+async function loadEnquiries() {
+  const tbody = $('enquiriesTableBody');
+  const { data, error } = await supabase.from('enquiries').select('*').order('created_at', { ascending: false });
+  if (error || !data || data.length === 0) { 
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--muted);">No enquiries yet.</td></tr>`; 
+    return; 
+  }
+  tbody.innerHTML = data.map(e => `
+    <tr>
+      <td style="font-weight:600;">${e.name || '—'}</td>
+      <td style="color:var(--muted); font-size:0.85rem;">${e.phone || '—'}</td>
+      <td style="color:var(--muted); font-size:0.82rem;">${new Date(e.created_at).toLocaleDateString('en-IN')}</td>
+      <td><span class="badge badge-gold">New</span></td>
+    </tr>
+  `).join('');
+}
+
+// ── GALLERY PHOTOS ─────────────────────────────────────────
+async function loadGallery() {
+  const grid = $('galleryGrid');
+  const { data, error } = await supabase.from('gallery').select('*').order('created_at', { ascending: false });
+  if (error || !data || data.length === 0) { 
+    grid.innerHTML = `<div style="text-align:center; color:var(--muted); grid-column:1/-1;">No photos in gallery.</div>`; 
+    return; 
+  }
+  grid.innerHTML = data.map(p => `
+    <div class="card" style="padding:0; overflow:hidden;">
+      <img src="${p.image_url}" style="width:100%; height:140px; object-fit:cover;">
+      <div style="padding:0.75rem;">
+        <div style="font-size:0.8rem; color:var(--muted); margin-bottom:0.5rem; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${p.caption || 'No caption'}</div>
+        <button class="btn btn-danger btn-sm" style="width:100%;" onclick="deleteGalleryPhoto('${p.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.deleteGalleryPhoto = async (id) => {
+  if(!confirm('Delete this photo?')) return;
+  await supabase.from('gallery').delete().eq('id', id);
+  loadGallery();
+  toast('Photo deleted', 'success');
+};
+
+let galleryUploads = [];
+$('galleryPhotoInput').addEventListener('change', async (e) => {
+  const files = e.target.files;
+  if (!files.length) return;
+  $('galleryUploadText').textContent = 'Uploading ' + files.length + ' file(s)...';
+  galleryUploads = [];
+  
+  for(let file of files) {
+    const ext = file.name.split('.').pop();
+    const path = `gallery/photo_${Date.now()}_${Math.random().toString(36).substring(7)}.${ext}`;
+    const { error } = await supabase.storage.from('public').upload(path, file);
+    if (!error) {
+      const { data: urlData } = supabase.storage.from('public').getPublicUrl(path);
+      galleryUploads.push(urlData.publicUrl);
+    }
+  }
+  $('galleryUploadText').textContent = `✓ ${galleryUploads.length} photo(s) ready for upload.`;
+});
+
+$('uploadGalleryBtn').addEventListener('click', async () => {
+  if(!galleryUploads.length) return toast('Please select photos first', 'error');
+  const caption = $('galleryCaption').value;
+  
+  const inserts = galleryUploads.map(url => ({ image_url: url, caption: caption }));
+  const { error } = await supabase.from('gallery').insert(inserts);
+  
+  if(error) return toast('Failed to add photos', 'error');
+  $('galleryCaption').value = '';
+  galleryUploads = [];
+  $('galleryUploadText').textContent = 'Click or drag photos here (multiple allowed)';
+  $('galleryPhotoInput').value = '';
+  
+  loadGallery();
+  toast('Photos published to gallery!', 'success');
+});
+
+
+// ── FACULTY PHOTOS ─────────────────────────────────────────
+async function loadFaculty() {
+  const grid = $('facultyAdminGrid');
+  const { data, error } = await supabase.from('faculty').select('*').order('created_at', { ascending: false });
+  if (error || !data || data.length === 0) { 
+    grid.innerHTML = `<div style="text-align:center; color:var(--muted); grid-column:1/-1;">No faculty members added yet.</div>`; 
+    return; 
+  }
+  grid.innerHTML = data.map(f => `
+    <div class="card" style="padding:1rem; text-align:center;">
+      ${f.image_url ? `<img src="${f.image_url}" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:0.8rem;">` : `<div style="width:70px; height:70px; border-radius:50%; background:var(--dark4); margin:0 auto 0.8rem; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-user"></i></div>`}
+      <div style="font-weight:700; font-size:0.9rem;">${f.name}</div>
+      <div style="font-size:0.75rem; color:var(--gold); margin-top:0.2rem;">${f.role}</div>
+      <button class="btn btn-danger btn-sm" style="width:100%; margin-top:0.8rem;" onclick="deleteFaculty('${f.id}')"><i class="fa-solid fa-trash"></i></button>
+    </div>
+  `).join('');
+}
+
+window.deleteFaculty = async (id) => {
+  if(!confirm('Remove this faculty member?')) return;
+  await supabase.from('faculty').delete().eq('id', id);
+  loadFaculty();
+  toast('Faculty removed', 'success');
+};
+
+let facultyPhotoUrl = '';
+$('facultyPhotoInput').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  $('facultyUploadText').textContent = 'Uploading...';
+  const ext = file.name.split('.').pop();
+  const path = `faculty/prof_${Date.now()}.${ext}`;
+  const { error } = await supabase.storage.from('public').upload(path, file);
+  if (!error) {
+    const { data: urlData } = supabase.storage.from('public').getPublicUrl(path);
+    facultyPhotoUrl = urlData.publicUrl;
+    $('facultyUploadText').textContent = `✓ Photo uploaded!`;
+  }
+});
+
+$('saveFacultyBtn').addEventListener('click', async () => {
+  const name = $('facultyName').value;
+  const role = $('facultyRole').value;
+  const experience = $('facultyExp').value;
+  
+  if(!name || !role) return toast('Name and role are required', 'error');
+  
+  const { error } = await supabase.from('faculty').insert({
+    name, role, experience, image_url: facultyPhotoUrl
+  });
+  
+  if(error) return toast('Failed to add faculty', 'error');
+  
+  $('facultyName').value = '';
+  $('facultyRole').value = '';
+  $('facultyExp').value = '';
+  facultyPhotoUrl = '';
+  $('facultyPhotoInput').value = '';
+  $('facultyUploadText').textContent = 'Click to upload faculty photo';
+  
+  loadFaculty();
+  toast('Faculty member added!', 'success');
+});
