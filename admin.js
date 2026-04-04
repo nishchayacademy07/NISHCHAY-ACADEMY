@@ -168,9 +168,9 @@ $('courseImageInput').addEventListener('change', async (e) => {
   $('imgUploadText').textContent = 'Uploading...';
   const ext = file.name.split('.').pop();
   const path = `courses/${Date.now()}.${ext}`;
-  const { error } = await supabase.storage.from('public').upload(path, file, { upsert: true });
+  const { error } = await supabase.storage.from('media').upload(path, file, { upsert: true });
   if (error) { toast('Image upload failed.', 'error'); return; }
-  const { data: urlData } = supabase.storage.from('public').getPublicUrl(path);
+  const { data: urlData } = supabase.storage.from('media').getPublicUrl(path);
   courseImageUrl = urlData.publicUrl;
   $('imgUploadText').textContent = `✓ ${file.name}`;
   toast('Image uploaded!', 'success');
@@ -280,9 +280,9 @@ $('siteLogoInput').addEventListener('change', async (e) => {
   $('logoUploadText').textContent = 'Uploading...';
   const ext = file.name.split('.').pop();
   const path = `logos/logo_${Date.now()}.${ext}`;
-  const { error } = await supabase.storage.from('public').upload(path, file, { upsert: true });
+  const { error } = await supabase.storage.from('media').upload(path, file, { upsert: true });
   if (error) { toast('Logo upload failed.', 'error'); return; }
-  const { data: urlData } = supabase.storage.from('public').getPublicUrl(path);
+  const { data: urlData } = supabase.storage.from('media').getPublicUrl(path);
   newLogoUrl = urlData.publicUrl;
   $('logoUploadText').textContent = `✓ ${file.name} uploaded!`;
   $('currentLogoWrap').style.display = 'block';
@@ -387,9 +387,9 @@ $('galleryPhotoInput').addEventListener('change', async (e) => {
   for(let file of files) {
     const ext = file.name.split('.').pop();
     const path = `gallery/photo_${Date.now()}_${Math.random().toString(36).substring(7)}.${ext}`;
-    const { error } = await supabase.storage.from('public').upload(path, file, { upsert: true });
+    const { error } = await supabase.storage.from('media').upload(path, file, { upsert: true });
     if (!error) {
-      const { data: urlData } = supabase.storage.from('public').getPublicUrl(path);
+      const { data: urlData } = supabase.storage.from('media').getPublicUrl(path);
       galleryUploads.push(urlData.publicUrl);
     } else {
       toast('Gallery upload error: ' + error.message, 'error');
@@ -452,9 +452,9 @@ $('facultyPhotoInput').addEventListener('change', async (e) => {
   $('facultyUploadText').textContent = 'Uploading...';
   const ext = file.name.split('.').pop();
   const path = `faculty/prof_${Date.now()}.${ext}`;
-  const { error } = await supabase.storage.from('public').upload(path, file, { upsert: true });
+  const { error } = await supabase.storage.from('media').upload(path, file, { upsert: true });
   if (!error) {
-    const { data: urlData } = supabase.storage.from('public').getPublicUrl(path);
+    const { data: urlData } = supabase.storage.from('media').getPublicUrl(path);
     facultyPhotoUrl = urlData.publicUrl;
     $('facultyUploadText').textContent = `✓ Photo uploaded!`;
   } else {
@@ -520,9 +520,9 @@ $('topperPhotoInput').addEventListener('change', async (e) => {
   $('topperUploadText').textContent = 'Uploading...';
   const ext = file.name.split('.').pop();
   const path = `toppers/topper_${Date.now()}.${ext}`;
-  const { error } = await supabase.storage.from('public').upload(path, file, { upsert: true });
+  const { error } = await supabase.storage.from('media').upload(path, file, { upsert: true });
   if (!error) {
-    const { data: urlData } = supabase.storage.from('public').getPublicUrl(path);
+    const { data: urlData } = supabase.storage.from('media').getPublicUrl(path);
     topperPhotoUrl = urlData.publicUrl;
     $('topperUploadText').textContent = `✓ Photo uploaded!`;
   } else {
