@@ -1,29 +1,31 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nishchay Academy â€” Where Excellence is Built</title>
-    <!-- Use the new Pinnacle CSS -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nishchay Academy &mdash; Where Excellence is Built</title>
+  <meta name="description" content="Join Nishchay Academy for comprehensive coaching in IIT JEE, NEET, UPSC and more. 47,000+ toppers. 98.6% success rate.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="pinnacle.css">
 </head>
 <body>
 
 <!-- NAVBAR -->
-<nav>
+<nav id="mainNav">
   <a href="index.html" class="nav-logo" id="cms-branding">Nishchay<span> Academy</span></a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinks">
     <li><a href="#toppers">Toppers</a></li>
     <li><a href="#courses">Courses</a></li>
     <li><a href="#testimonials">Reviews</a></li>
     <li><a href="#faculty">Faculty</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <!-- Removed Login/SignUp, replaced with Schedule Demo -->
-  <a href="#contact" class="nav-cta" style="text-decoration:none;">Schedule Demo</a>
+  <a href="#contact" class="nav-cta">Schedule Demo</a>
+  <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -31,14 +33,14 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-badge">India's #1 Ranked Coaching Institute</div>
+    <div class="hero-badge">India&rsquo;s Top Ranked Coaching Institute</div>
     <h1 id="cms-hero-title">Build Your<br><em>Legacy</em> of<br>Excellence.</h1>
     <p class="hero-sub" id="cms-hero-subtitle">
-      From IIT-JEE to UPSC â€” Nishchay Academy has shaped over 47,000 toppers across India's most competitive examinations with world-class pedagogy.
+      From IIT-JEE to UPSC &mdash; Nishchay Academy has shaped over 47,000 toppers across India&rsquo;s most competitive examinations with world-class pedagogy.
     </p>
     <div class="hero-actions">
-      <a href="#contact" class="btn-primary">Start Your Journey â†’</a>
-      <a href="#courses" class="btn-ghost" style="text-decoration:none;">Explore Courses</a>
+      <a href="#contact" class="btn-primary">Start Your Journey &rarr;</a>
+      <a href="#courses" class="btn-ghost">Explore Courses</a>
     </div>
     <div class="hero-stats">
       <div class="stat-item">
@@ -60,22 +62,25 @@
     </div>
   </div>
 
-  <!-- floating cards -->
+  <!-- Floating Result Cards -->
   <div class="hero-visual">
     <div class="float-card">
+      <div class="fc-avatar av-blue">A</div>
       <div class="fc-name">Arjun Mehta</div>
-      <div class="fc-rank">AIR 1 â€” IIT JEE 2024</div>
-      <div class="fc-score">Score: 332/360 Â· Nishchay Batch A</div>
+      <div class="fc-rank">AIR 1 &mdash; IIT JEE 2024</div>
+      <div class="fc-score">Score: 332/360 &middot; Nishchay Batch A</div>
     </div>
     <div class="float-card">
+      <div class="fc-avatar av-gold">P</div>
       <div class="fc-name">Priya Sharma</div>
-      <div class="fc-rank">AIR 3 â€” UPSC CSE 2023</div>
+      <div class="fc-rank">AIR 3 &mdash; UPSC CSE 2023</div>
       <div class="fc-score">Nishchay IAS Intensive</div>
     </div>
     <div class="float-card">
+      <div class="fc-avatar av-green">R</div>
       <div class="fc-name">Rohan Gupta</div>
-      <div class="fc-rank">AIR 5 â€” NEET 2024</div>
-      <div class="fc-score">Score: 715/720 Â· Nishchay Medical</div>
+      <div class="fc-rank">AIR 5 &mdash; NEET 2024</div>
+      <div class="fc-score">Score: 715/720 &middot; Nishchay Medical</div>
     </div>
   </div>
 </section>
@@ -83,47 +88,323 @@
 <!-- RESULTS TICKER -->
 <div class="ticker-wrap">
   <div class="ticker">
-    <span class="ticker-item"><span class="hi">Arjun M.</span> â€” IIT Bombay CSE <span class="ticker-dot">âœ¦</span></span>
-    <span class="ticker-item"><span class="hi">Priya S.</span> â€” IAS 2023 AIR 3 <span class="ticker-dot">âœ¦</span></span>
-    <span class="ticker-item"><span class="hi">Rohan G.</span> â€” AIIMS Delhi NEET 715 <span class="ticker-dot">âœ¦</span></span>
-    <span class="ticker-item"><span class="hi">Sneha R.</span> â€” IIT JEE AIR 12 <span class="ticker-dot">âœ¦</span></span>
-    <span class="ticker-item"><span class="hi">Karan V.</span> â€” CAT 99.97 Percentile <span class="ticker-dot">âœ¦</span></span>
-    <span class="ticker-item"><span class="hi">Divya K.</span> â€” NDA AIR 1 2024 <span class="ticker-dot">âœ¦</span></span>
-    <!-- duplicate for continuous effect -->
-    <span class="ticker-item"><span class="hi">Arjun M.</span> â€” IIT Bombay CSE <span class="ticker-dot">âœ¦</span></span>
-    <span class="ticker-item"><span class="hi">Priya S.</span> â€” IAS 2023 AIR 3 <span class="ticker-dot">âœ¦</span></span>
-    <span class="ticker-item"><span class="hi">Rohan G.</span> â€” AIIMS Delhi NEET 715 <span class="ticker-dot">âœ¦</span></span>
-    <span class="ticker-item"><span class="hi">Sneha R.</span> â€” IIT JEE AIR 12 <span class="ticker-dot">âœ¦</span></span>
-    <span class="ticker-item"><span class="hi">Karan V.</span> â€” CAT 99.97 Percentile <span class="ticker-dot">âœ¦</span></span>
-    <span class="ticker-item"><span class="hi">Divya K.</span> â€” NDA AIR 1 2024 <span class="ticker-dot">âœ¦</span></span>
+    <span class="ticker-item"><span class="hi">Arjun M.</span> &mdash; IIT Bombay CSE <span class="ticker-dot">&starf;</span></span>
+    <span class="ticker-item"><span class="hi">Priya S.</span> &mdash; IAS 2023 AIR 3 <span class="ticker-dot">&starf;</span></span>
+    <span class="ticker-item"><span class="hi">Rohan G.</span> &mdash; AIIMS Delhi NEET 715 <span class="ticker-dot">&starf;</span></span>
+    <span class="ticker-item"><span class="hi">Sneha R.</span> &mdash; IIT JEE AIR 12 <span class="ticker-dot">&starf;</span></span>
+    <span class="ticker-item"><span class="hi">Karan V.</span> &mdash; CAT 99.97 Percentile <span class="ticker-dot">&starf;</span></span>
+    <span class="ticker-item"><span class="hi">Divya K.</span> &mdash; NDA AIR 1 2024 <span class="ticker-dot">&starf;</span></span>
+    <span class="ticker-item"><span class="hi">Aditya P.</span> &mdash; IIT Delhi Electrical <span class="ticker-dot">&starf;</span></span>
+    <!-- Duplicate for loop -->
+    <span class="ticker-item"><span class="hi">Arjun M.</span> &mdash; IIT Bombay CSE <span class="ticker-dot">&starf;</span></span>
+    <span class="ticker-item"><span class="hi">Priya S.</span> &mdash; IAS 2023 AIR 3 <span class="ticker-dot">&starf;</span></span>
+    <span class="ticker-item"><span class="hi">Rohan G.</span> &mdash; AIIMS Delhi NEET 715 <span class="ticker-dot">&starf;</span></span>
+    <span class="ticker-item"><span class="hi">Sneha R.</span> &mdash; IIT JEE AIR 12 <span class="ticker-dot">&starf;</span></span>
+    <span class="ticker-item"><span class="hi">Karan V.</span> &mdash; CAT 99.97 Percentile <span class="ticker-dot">&starf;</span></span>
+    <span class="ticker-item"><span class="hi">Divya K.</span> &mdash; NDA AIR 1 2024 <span class="ticker-dot">&starf;</span></span>
+    <span class="ticker-item"><span class="hi">Aditya P.</span> &mdash; IIT Delhi Electrical <span class="ticker-dot">&starf;</span></span>
   </div>
 </div>
 
-<!-- DYNAMIC COURSES -->
-<section id="courses" class="reveal">
-  <div class="section-tag">Programs Offered</div>
-  <div class="section-title">Discover Our Courses</div>
-  <div class="section-sub">Meticulously crafted programs designed by expert educators, available dynamically from our CMS.</div>
-  <div class="courses-grid" id="public-courses-grid">
-    <div style="color:var(--gold); padding: 2rem;">Loading courses from database...</div>
+<!-- TOPPERS -->
+<section id="toppers" class="toppers-section reveal">
+  <div class="toppers-header">
+    <div>
+      <div class="section-tag">Hall of Fame</div>
+      <div class="section-title">Our Star Toppers</div>
+      <div class="section-sub">Real students. Real results. These are the faces of Nishchay&rsquo;s legacy.</div>
+    </div>
+  </div>
+  <div class="toppers-grid">
+    <div class="topper-card featured">
+      <div class="topper-img-wrap">
+        <div class="avatar-placeholder av-blue">A</div>
+        <div class="topper-rank">&#127942; AIR 1</div>
+      </div>
+      <div class="topper-body">
+        <div class="topper-name">Arjun Mehta</div>
+        <div class="topper-exam">IIT JEE Advanced 2024</div>
+        <div class="topper-score">332 <span>/ 360</span></div>
+        <div class="topper-year">IIT Bombay &mdash; Computer Science</div>
+      </div>
+    </div>
+    <div class="topper-card">
+      <div class="topper-img-wrap">
+        <div class="avatar-placeholder av-gold">P</div>
+        <div class="topper-rank">AIR 3</div>
+      </div>
+      <div class="topper-body">
+        <div class="topper-name">Priya Sharma</div>
+        <div class="topper-exam">UPSC CSE 2023</div>
+        <div class="topper-score">1087 <span>pts</span></div>
+        <div class="topper-year">IAS &mdash; Maharashtra Cadre</div>
+      </div>
+    </div>
+    <div class="topper-card">
+      <div class="topper-img-wrap">
+        <div class="avatar-placeholder av-green">R</div>
+        <div class="topper-rank">AIR 5</div>
+      </div>
+      <div class="topper-body">
+        <div class="topper-name">Rohan Gupta</div>
+        <div class="topper-exam">NEET UG 2024</div>
+        <div class="topper-score">715 <span>/ 720</span></div>
+        <div class="topper-year">AIIMS New Delhi &mdash; MBBS</div>
+      </div>
+    </div>
+    <div class="topper-card">
+      <div class="topper-img-wrap">
+        <div class="avatar-placeholder av-red">S</div>
+        <div class="topper-rank">AIR 12</div>
+      </div>
+      <div class="topper-body">
+        <div class="topper-name">Sneha Reddy</div>
+        <div class="topper-exam">IIT JEE Advanced 2024</div>
+        <div class="topper-score">318 <span>/ 360</span></div>
+        <div class="topper-year">IIT Delhi &mdash; Electrical Engg.</div>
+      </div>
+    </div>
+    <div class="topper-card">
+      <div class="topper-img-wrap">
+        <div class="avatar-placeholder av-cyan">K</div>
+        <div class="topper-rank">99.97%ile</div>
+      </div>
+      <div class="topper-body">
+        <div class="topper-name">Karan Verma</div>
+        <div class="topper-exam">CAT 2023</div>
+        <div class="topper-score">99.97 <span>%ile</span></div>
+        <div class="topper-year">IIM Ahmedabad &mdash; MBA</div>
+      </div>
+    </div>
+    <div class="topper-card">
+      <div class="topper-img-wrap">
+        <div class="avatar-placeholder av-yellow">D</div>
+        <div class="topper-rank">&#129351; AIR 1</div>
+      </div>
+      <div class="topper-body">
+        <div class="topper-name">Divya Kumar</div>
+        <div class="topper-exam">NDA Written 2024</div>
+        <div class="topper-score">840 <span>/ 900</span></div>
+        <div class="topper-year">National Defence Academy</div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- CTA / DEMO SCHEDULE -->
+<!-- COURSES -->
+<section id="courses" class="reveal">
+  <div class="section-tag">Programs Offered</div>
+  <div class="section-title">Discover Our Courses</div>
+  <div class="section-sub">Meticulously crafted programs designed by expert educators.</div>
+  <div class="courses-grid" id="public-courses-grid">
+    <!-- Default static cards shown before DB loads -->
+    <div class="course-card">
+      <div class="course-card-body">
+        <div class="course-icon">&#9883;&#65039;</div>
+        <div class="course-title">IIT JEE Foundation &amp; Advanced</div>
+        <div class="course-subject">IIT JEE</div>
+        <div class="course-desc">India&rsquo;s most rigorous JEE program with 2-year and 1-year batches, daily DPPs, and mock test series.</div>
+        <div class="course-price-row">
+          <span class="course-price" style="color:var(--gold);">&#8377;12,999</span>
+          <a href="#contact" class="btn-ghost" style="padding:0.4rem 1rem; font-size:0.82rem;">Inquire</a>
+        </div>
+      </div>
+    </div>
+    <div class="course-card">
+      <div class="course-card-body">
+        <div class="course-icon">&#127973;</div>
+        <div class="course-title">NEET Medical Preparation</div>
+        <div class="course-subject">NEET</div>
+        <div class="course-desc">Comprehensive Biology, Chemistry, and Physics curriculum with 5000+ question bank and NCERT mastery.</div>
+        <div class="course-price-row">
+          <span class="course-price" style="color:var(--gold);">&#8377;10,999</span>
+          <a href="#contact" class="btn-ghost" style="padding:0.4rem 1rem; font-size:0.82rem;">Inquire</a>
+        </div>
+      </div>
+    </div>
+    <div class="course-card">
+      <div class="course-card-body">
+        <div class="course-icon">&#127963;&#65039;</div>
+        <div class="course-title">UPSC Civil Services (IAS)</div>
+        <div class="course-subject">UPSC</div>
+        <div class="course-desc">Prelims + Mains + Interview coaching by former IAS officers and subject matter experts.</div>
+        <div class="course-price-row">
+          <span class="course-price" style="color:var(--gold);">&#8377;15,999</span>
+          <a href="#contact" class="btn-ghost" style="padding:0.4rem 1rem; font-size:0.82rem;">Inquire</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="db-courses-grid" class="courses-grid" style="display:none;"></div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="reveal" style="background: var(--dark2); padding-top: 4rem; padding-bottom: 4rem;">
+  <div class="section-tag">Milestones</div>
+  <div class="section-title">Our Track Record</div>
+  <div class="achievements-row">
+    <div class="achievement-card">
+      <div class="ach-fake bg1">
+        <div class="ach-icon">&#127942;</div>
+        <div class="ach-num">340+</div>
+        <div class="ach-label">All India Rank 1 holders across all exams since 2002</div>
+      </div>
+    </div>
+    <div class="achievement-card">
+      <div class="ach-fake bg2">
+        <div class="ach-icon">&#127891;</div>
+        <div class="ach-num">47K+</div>
+        <div class="ach-label">Students successfully placed in top institutions</div>
+      </div>
+    </div>
+    <div class="achievement-card">
+      <div class="ach-fake bg3">
+        <div class="ach-icon">&#11088;</div>
+        <div class="ach-num">4.9&#9733;</div>
+        <div class="ach-label">Average rating across 12,000+ Google reviews</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="testimonials-section reveal">
+  <div class="section-tag">Student Voices</div>
+  <div class="section-title">What Our Alumni Say</div>
+  <div class="section-sub">Hear from the students who made it to the top &mdash; in their own words.</div>
+  <div class="testimonials-grid">
+    <div class="testi-card">
+      <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testi-text">&ldquo;Nishchay Academy didn&rsquo;t just teach me Physics &mdash; they taught me how to think. The mentorship I received here was unparalleled. My JEE AIR 1 is a product of this culture of excellence.&rdquo;</p>
+      <div class="testi-footer">
+        <div class="testi-avatar" style="background:rgba(79,124,255,0.15); color:#7A9FFF; border-color:rgba(79,124,255,0.4);">A</div>
+        <div>
+          <div class="testi-name">Arjun Mehta</div>
+          <div class="testi-detail">IIT JEE AIR 1 &middot; IIT Bombay CSE</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testi-text">&ldquo;The UPSC program here is structured brilliantly. Current affairs sessions, answer writing workshops, and mock interviews by former IAS officers &mdash; it&rsquo;s the complete package.&rdquo;</p>
+      <div class="testi-footer">
+        <div class="testi-avatar" style="background:rgba(201,168,76,0.15); color:var(--gold);">P</div>
+        <div>
+          <div class="testi-name">Priya Sharma</div>
+          <div class="testi-detail">IAS 2023 &middot; AIR 3 &middot; Maharashtra Cadre</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testi-text">&ldquo;I joined Nishchay after two failed NEET attempts. The biology faculty here completely changed how I approached the subject. Third attempt &mdash; 715/720. I owe it all to this place.&rdquo;</p>
+      <div class="testi-footer">
+        <div class="testi-avatar" style="background:rgba(79,201,138,0.15); color:#4FC98A; border-color:rgba(79,201,138,0.4);">R</div>
+        <div>
+          <div class="testi-name">Rohan Gupta</div>
+          <div class="testi-detail">NEET AIR 5 &middot; AIIMS New Delhi</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testi-text">&ldquo;The test series here is harder than the actual exam. By the time I sat for CAT, I was so well-prepared that the paper felt easy. 99.97 percentile was a dream I thought was out of reach.&rdquo;</p>
+      <div class="testi-footer">
+        <div class="testi-avatar" style="background:rgba(212,201,76,0.15); color:#D4C94C; border-color:rgba(212,201,76,0.4);">K</div>
+        <div>
+          <div class="testi-name">Karan Verma</div>
+          <div class="testi-detail">CAT 99.97%ile &middot; IIM Ahmedabad</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testi-text">&ldquo;Nishchay&rsquo;s online program gave me access to world-class faculty at a fraction of the cost. My GATE rank was 47 &mdash; I&rsquo;m now at IISc Bangalore. Truly life-changing.&rdquo;</p>
+      <div class="testi-footer">
+        <div class="testi-avatar" style="background:rgba(107,201,255,0.15); color:#6BC9FF; border-color:rgba(107,201,255,0.4);">M</div>
+        <div>
+          <div class="testi-name">Meenal Joshi</div>
+          <div class="testi-detail">GATE CS AIR 47 &middot; IISc Bangalore</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="testi-text">&ldquo;The SSB preparation at Nishchay was extraordinary. The ex-army officers coaching us gave real insight. I cleared NDA on my first attempt at just 17 years old.&rdquo;</p>
+      <div class="testi-footer">
+        <div class="testi-avatar" style="background:rgba(255,107,107,0.15); color:#FF9B9B; border-color:rgba(255,107,107,0.4);">D</div>
+        <div>
+          <div class="testi-name">Divya Kumar</div>
+          <div class="testi-detail">NDA AIR 1 2024 &middot; National Defence Academy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FACULTY -->
+<section id="faculty" class="reveal">
+  <div class="section-tag">The Experts</div>
+  <div class="section-title">Faculty of Legends</div>
+  <div class="section-sub">IITians, IIM alumni, former IAS officers &mdash; our faculty have walked the path they teach.</div>
+  <div class="faculty-grid">
+    <div class="faculty-card">
+      <div class="faculty-avatar av-blue">VR</div>
+      <div class="faculty-name">Prof. V. Rao</div>
+      <div class="faculty-role">Physics &mdash; JEE</div>
+      <div class="faculty-exp">IIT Madras &middot; 18 yrs exp</div>
+    </div>
+    <div class="faculty-card">
+      <div class="faculty-avatar av-gold">SK</div>
+      <div class="faculty-name">Dr. S. Kapoor</div>
+      <div class="faculty-role">Biology &mdash; NEET</div>
+      <div class="faculty-exp">AIIMS Graduate &middot; 14 yrs exp</div>
+    </div>
+    <div class="faculty-card">
+      <div class="faculty-avatar av-green">AM</div>
+      <div class="faculty-name">Smt. A. Mishra</div>
+      <div class="faculty-role">UPSC &mdash; GS &amp; Essay</div>
+      <div class="faculty-exp">Ex-IAS 2007 Batch</div>
+    </div>
+    <div class="faculty-card">
+      <div class="faculty-avatar av-red">RD</div>
+      <div class="faculty-name">Prof. R. Das</div>
+      <div class="faculty-role">Mathematics &mdash; JEE</div>
+      <div class="faculty-exp">IIT Kharagpur &middot; 22 yrs exp</div>
+    </div>
+    <div class="faculty-card">
+      <div class="faculty-avatar av-cyan">NK</div>
+      <div class="faculty-name">Dr. N. Kumar</div>
+      <div class="faculty-role">Chemistry &mdash; JEE/NEET</div>
+      <div class="faculty-exp">IIT Bombay &middot; 16 yrs exp</div>
+    </div>
+    <div class="faculty-card">
+      <div class="faculty-avatar av-yellow">PT</div>
+      <div class="faculty-name">Col. P. Thakur</div>
+      <div class="faculty-role">NDA / SSB Prep</div>
+      <div class="faculty-exp">Ex-Army Colonel &middot; 20 yrs</div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE DEMO CTA -->
 <section id="contact" class="cta-section reveal">
   <div class="cta-glow"></div>
   <div style="position:relative; z-index:2;">
     <div class="section-tag" style="text-align:center;">Join 47,000+ Toppers</div>
     <div class="section-title" style="text-align:center; margin: 0 auto 1rem;">Schedule Your Free<br>Demo <em style="font-style:italic; color:var(--gold)">Class.</em></div>
-    <div class="section-sub" style="text-align:center; margin: 0 auto 2.5rem;">Leave your details â€” our counsellors will reach out within 24 hours to schedule your exclusive demo class.</div>
-    <div class="cta-form">
-      <input class="cta-input" type="text" placeholder="Your Full Name" />
-      <input class="cta-input" type="tel" placeholder="Mobile Number" />
-      <button class="btn-primary" style="padding: 0.85rem 2rem;">Schedule Demo â†’</button>
-    </div>
+    <p class="section-sub" style="text-align:center; margin: 0 auto 2.5rem;">Leave your details &mdash; our counsellors will reach out within 24 hours to schedule your exclusive demo class.</p>
+    <form class="cta-form" id="demoForm" onsubmit="submitDemo(event)">
+      <input class="cta-input" type="text" id="demoName" placeholder="Your Full Name" required>
+      <input class="cta-input" type="tel" id="demoPhone" placeholder="Mobile Number" required>
+      <button class="cta-btn" type="submit" id="demoBtn">Schedule Demo &rarr;</button>
+    </form>
     <p style="text-align:center; margin-top:1.2rem; font-size:0.78rem; color: var(--muted);">
-      No spam. No pressure. Just expert guidance. ðŸ”’ Your data is safe.
+      No spam. No pressure. Just expert guidance. &#128274; Your data is safe.
     </p>
+    <div id="demoSuccess" style="display:none; text-align:center; margin-top:1.5rem; padding:1.2rem; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:10px; color:#4ade80; font-weight:600;">
+      &#10003; Thank you! Our counsellor will contact you within 24 hours.
+    </div>
   </div>
 </section>
 
@@ -131,97 +412,126 @@
 <footer>
   <div class="footer-top">
     <div class="footer-brand">
-      <span class="nav-logo" style="display:block;margin-bottom:1rem;">Nishchay<span style="color:var(--text)"> Academy</span></span>
-      <p id="cms-footer-text">Shaping India's future leaders through world-class education since 2002.</p>
+      <a href="index.html" class="nav-logo" style="font-size:1.3rem;">Nishchay<span> Academy</span></a>
+      <p id="cms-footer-text">Shaping India&rsquo;s future leaders through world-class education since 2002.</p>
     </div>
     <div class="footer-col">
-      <h5>Links</h5>
+      <h5>Programs</h5>
+      <ul>
+        <li><a href="#courses">IIT JEE</a></li>
+        <li><a href="#courses">NEET</a></li>
+        <li><a href="#courses">UPSC / IAS</a></li>
+        <li><a href="#courses">CAT / MBA</a></li>
+        <li><a href="#courses">NDA</a></li>
+        <li><a href="#courses">GATE</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Quick Links</h5>
       <ul>
         <li><a href="#toppers">Toppers</a></li>
-        <li><a href="#courses">Courses</a></li>
         <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#faculty">Faculty</a></li>
+        <li><a href="#contact">Schedule Demo</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="#" id="whatsapp-link">&#128222; WhatsApp Us</a></li>
+        <li><a href="mailto:hello@nishchayacademy.com" class="dynamic-email">&#9993; Email Us</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>Â© 2026 Nishchay Academy Pvt. Ltd. All rights reserved.</p>
-    <a href="admin.html" style="color:var(--muted); font-size:0.8rem; text-decoration:none; opacity:0.5;">Admin Access</a>
+    <p>&copy; 2026 Nishchay Academy. All rights reserved.</p>
+    <a href="login.html" style="color:var(--muted); font-size:0.8rem; text-decoration:none; opacity:0.4; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.4'">Admin Access</a>
   </div>
 </footer>
 
-<!-- WhatsApp Button -->
-<a href="https://wa.me/919876543210" class="whatsapp-btn" target="_blank" rel="noopener noreferrer">
-    <i class="fa-brands fa-whatsapp"></i>
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/919876543210" class="whatsapp-btn" id="whatsapp-float" target="_blank" rel="noopener noreferrer">
+  <i class="fa-brands fa-whatsapp"></i>
 </a>
 
-<!-- Tawk.to Script -->
+<!-- Tawk.to -->
 <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-        s1.async=true;
-        s1.src='https://embed.tawk.to/69cf86d453d34c1c35ed8d3a/1jl9ba368';
-        s1.charset='UTF-8';
-        s1.setAttribute('crossorigin','*');
-        s0.parentNode.insertBefore(s1,s0);
-    })();
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+  (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/69cf86d453d34c1c35ed8d3a/1jl9ba368';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+  })();
 </script>
 
-<!-- CMS & DYNAMIC LOGIC -->
 <script type="module">
-    import { supabase } from './supabase.js';
-    import { applyGlobalSettings } from './settings.js';
-    
-    // Apply dynamic colors, logos, and hero text
-    applyGlobalSettings();
+  import { supabase } from './supabase.js';
+  import { applyGlobalSettings } from './settings.js';
 
-    // Fetch and display active courses
-    async function loadCourses() {
-        const grid = document.getElementById('public-courses-grid');
-        const { data: courses, error } = await supabase.from('courses').select('*').order('created_at', { ascending: false });
-        
-        if (error || !courses || courses.length === 0) {
-            grid.innerHTML = '<p style="color:var(--muted);">No courses available at the moment. Please check back later!</p>';
-            return;
-        }
+  // Apply CMS settings (colors, text)
+  applyGlobalSettings();
 
-        grid.innerHTML = '';
-        courses.forEach(course => {
-            const priceText = course.price > 0 ? `â‚¹${course.price}` : 'Free';
-            const imageUrl = course.image_url || 'https://via.placeholder.com/400x200?text=Course';
-            
-            grid.innerHTML += `
-                <div class="course-card">
-                  <div style="width:100%; height:150px; border-radius:8px; margin-bottom:1rem; background:url('${imageUrl}') center/cover;"></div>
-                  <h3 class="course-title">${course.title}</h3>
-                  <div style="font-size:0.8rem; color:var(--gold); margin-bottom:0.5rem; font-weight:600;">${course.subject}</div>
-                  <div class="course-desc">${course.description ? course.description.substring(0, 100) + '...' : ''}</div>
-                  <div style="display:flex; justify-content:space-between; align-items:center;">
-                      <span style="font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:var(--gold);">${priceText}</span>
-                      <a href="#contact" class="btn-ghost" style="padding:0.4rem 1rem; font-size:0.8rem; text-decoration:none;">Inquire</a>
-                  </div>
-                </div>
-            `;
-        });
-    }
+  // Load DB courses if available
+  async function loadDBCourses() {
+    try {
+      const { data: courses } = await supabase.from('courses').select('*').order('created_at', { ascending: false });
+      if (!courses || courses.length === 0) return;
+      const grid = document.getElementById('db-courses-grid');
+      const staticGrid = document.getElementById('public-courses-grid');
+      const icons = ['&#9883;&#65039;','&#127973;','&#127963;&#65039;','&#128202;','&#128737;&#65039;','&#128187;'];
+      grid.innerHTML = courses.map((c, i) => `
+        <div class="course-card">
+          ${c.image_url ? `<img class="course-card-img" src="${c.image_url}" alt="${c.title}" loading="lazy">` : ''}
+          <div class="course-card-body">
+            <div class="course-icon">${icons[i % icons.length]}</div>
+            <div class="course-title">${c.title}</div>
+            <div class="course-subject">${c.subject}</div>
+            <div class="course-desc">${(c.description || '').substring(0, 100)}${c.description && c.description.length > 100 ? '...' : ''}</div>
+            <div class="course-price-row">
+              <span class="course-price">${c.price > 0 ? '&#8377;' + c.price.toLocaleString('en-IN') : 'Free'}</span>
+              <a href="#contact" class="btn-ghost" style="padding:0.4rem 1rem; font-size:0.82rem;">Inquire</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      staticGrid.style.display = 'none';
+      grid.style.display = 'grid';
+    } catch(e) { /* Show static cards as fallback */ }
+  }
 
-    loadCourses();
+  loadDBCourses();
 
-    // Animations
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-            if(e.isIntersecting) { e.target.classList.add('visible'); }
-        });
-    }, { threshold: 0.1 });
-    reveals.forEach(r => observer.observe(r));
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
 
-    // Nav Background on Scroll
-    const nav = document.querySelector('nav');
-    window.addEventListener('scroll', () => {
-        nav.style.background = window.scrollY > 50 ? 'rgba(10,10,15,0.97)' : 'rgba(10,10,15,0.85)';
-    });
+  // Nav scroll effect
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 60 ? 'rgba(10,10,15,0.97)' : 'rgba(10,10,15,0.85)';
+  });
+
+  // Mobile nav
+  document.getElementById('navToggle').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  // Demo form submit
+  window.submitDemo = function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('demoBtn');
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+    setTimeout(() => {
+      document.getElementById('demoForm').style.display = 'none';
+      document.getElementById('demoSuccess').style.display = 'block';
+    }, 800);
+  };
 </script>
 </body>
 </html>
-
