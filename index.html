@@ -44,19 +44,19 @@
     </div>
     <div class="hero-stats">
       <div class="stat-item">
-        <div class="stat-num">47K+</div>
+        <div class="stat-num" id="cms-stat-students">47K+</div>
         <div class="stat-label">Students Placed</div>
       </div>
       <div class="stat-item">
-        <div class="stat-num">98.6%</div>
+        <div class="stat-num" id="cms-stat-success">98.6%</div>
         <div class="stat-label">Success Rate</div>
       </div>
       <div class="stat-item">
-        <div class="stat-num">22 Yrs</div>
+        <div class="stat-num" id="cms-stat-years">22 Yrs</div>
         <div class="stat-label">Of Excellence</div>
       </div>
       <div class="stat-item">
-        <div class="stat-num">340+</div>
+        <div class="stat-num" id="cms-stat-air1">340+</div>
         <div class="stat-label">AIR 1 Holders</div>
       </div>
     </div>
@@ -243,17 +243,6 @@
   <div class="section-tag">Milestones</div>
   <div class="section-title">Our Track Record</div>
   <div class="achievements-row">
-    <div class="achievement-card">
-      <div class="ach-fake bg1">
-        <div class="ach-icon">&#127942;</div>
-        <div class="ach-num">340+</div>
-        <div class="ach-label">All India Rank 1 holders across all exams since 2002</div>
-      </div>
-    </div>
-    <div class="achievement-card">
-      <div class="ach-fake bg2">
-        <div class="ach-icon">&#127891;</div>
-        <div class="ach-num">47K+</div>
         <div class="ach-label">Students successfully placed in top institutions</div>
       </div>
     </div>
@@ -499,10 +488,111 @@
       `).join('');
       staticGrid.style.display = 'none';
       grid.style.display = 'grid';
-    } catch(e) { /* Show static cards as fallback */ }
+    } catch(e) { console.error('Error loading courses', e); }
+  }
+
+  // Load Custom Dynamic Content (Toppers, Testimonials, Faculty, Gallery)
+  async function loadDynamicContent() {
+    try {
+      // Setup dynamic Settings fields
+      const { data: s } = await supabase.from('site_settings').select('*').single();
+      if(s) {
+        if(s.stat_students) {
+          if(document.getElementById('cms-stat-students')) document.getElementById('cms-stat-students').innerText = s.stat_students;
+          if(document.getElementById('cms-ach-students')) document.getElementById('cms-ach-students').innerText = s.stat_students;
+        }
+        if(s.stat_success) {
+          if(document.getElementById('cms-stat-success')) document.getElementById('cms-stat-success').innerText = s.stat_success;
+          if(document.getElementById('cms-ach-success')) document.getElementById('cms-ach-success').innerText = s.stat_success;
+        }
+        if(s.stat_years && document.getElementById('cms-stat-years')) document.getElementById('cms-stat-years').innerText = s.stat_years;
+        if(s.stat_air1) {
+          if(document.getElementById('cms-stat-air1')) document.getElementById('cms-stat-air1').innerText = s.stat_air1;
+          if(document.getElementById('cms-ach-air1')) document.getElementById('cms-ach-air1').innerText = s.stat_air1;
+        }
+      }
+
+      // Toppers
+      const { data: toppers } = await supabase.from('toppers').select('*').order('created_at', { ascending: true });
+      if(toppers && toppers.length > 0) {
+        const grid = document.querySelector('.toppers-grid') || document.getElementById('toppers-grid');
+        if(grid) {
+          grid.innerHTML = toppers.map(t => `
+            <div class="topper-card reveal fade-up">
+              <div class="topper-img">
+                <img src="${t.image_url || ''}" alt="${t.name}">
+                <div class="topper-rank">${t.rank}</div>
+              </div>
+              <div class="topper-info">
+                <div class="topper-name">${t.name}</div>
+                <div class="topper-exam">${t.exam}</div>
+                <div class="topper-score">Score: ${t.score}</div>
+                <div class="topper-year">${t.year_info || ''}</div>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Testimonials
+      const { data: testimonials } = await supabase.from('testimonials').select('*').order('created_at', { ascending: false });
+      if(testimonials && testimonials.length > 0) {
+        const tGrid = document.querySelector('.testimonials-grid');
+        if(tGrid) {
+          tGrid.innerHTML = testimonials.map(t => `
+            <div class="testimonial-card">
+              <div class="testi-header">
+                <div class="testi-avatar">${t.avatar_text || t.name.charAt(0)}</div>
+                <div>
+                  <div class="testi-name">${t.name}</div>
+                  <div class="testi-detail">${t.detail}</div>
+                </div>
+              </div>
+              <p class="testi-text">"${t.text}"</p>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Faculty
+      const { data: faculty } = await supabase.from('faculty').select('*').order('created_at', { ascending: false });
+      if (faculty && faculty.length > 0) {
+        const fGrid = document.querySelector('.faculty-grid');
+        if (fGrid) {
+          fGrid.innerHTML = faculty.map(f => `
+            <div class="faculty-card reveal fade-up">
+              ${f.image_url ? `<img src="${f.image_url}" alt="${f.name}">` : `<div style="height:320px; background:var(--dark3); display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-user" style="font-size:4rem; color:var(--dark4);"></i></div>`}
+              <div class="faculty-info">
+                <div class="faculty-name">${f.name}</div>
+                <div class="faculty-subject">${f.role}</div>
+                ${f.experience ? `<div class="faculty-creds">${f.experience}</div>` : ''}
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Gallery
+      const { data: gallery } = await supabase.from('gallery').select('*').order('created_at', { ascending: false });
+      if (gallery && gallery.length > 0) {
+        const defaultGallerySection = document.querySelector('.gallery-grid');
+        if (defaultGallerySection) {
+          defaultGallerySection.innerHTML = gallery.map(g => `
+            <a href="${g.image_url}" target="_blank" class="gallery-item">
+              <img src="${g.image_url}" alt="Gallery image">
+              <div class="gallery-overlay">
+                <span><i class="fa-solid fa-magnifying-glass-plus"></i><br>${g.caption || 'View Original'}</span>
+              </div>
+            </a>
+          `).join('');
+        }
+      }
+
+    } catch(e) { console.error('Error loading dynamic content', e); }
   }
 
   loadDBCourses();
+  loadDynamicContent();
 
   // Scroll reveal
   const observer = new IntersectionObserver(entries => {
