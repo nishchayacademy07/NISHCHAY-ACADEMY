@@ -50,7 +50,61 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
   hero_subtitle TEXT DEFAULT 'Join Nishchay Academy for comprehensive coaching and academic success.',
   about_heading TEXT DEFAULT 'About Nishchay Academy',
   about_content TEXT DEFAULT 'We provide quality education to help students achieve their goals in competitive exams and academics.',
-  footer_text TEXT DEFAULT 'Nishchay Academy - Empowering Students since 2024'
+  footer_text TEXT DEFAULT 'Nishchay Academy - Empowering Students since 2024',
+  -- Stats
+  stat_students TEXT DEFAULT '47K+',
+  stat_success TEXT DEFAULT '98.6%',
+  stat_years TEXT DEFAULT '22 Yrs',
+  stat_air1 TEXT DEFAULT '340+'
+);
+
+-- 5. ENQUIRIES TABLE
+CREATE TABLE IF NOT EXISTS public.enquiries (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  status TEXT DEFAULT 'new',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 6. GALLERY TABLE
+CREATE TABLE IF NOT EXISTS public.gallery (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  image_url TEXT NOT NULL,
+  caption TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 7. FACULTY TABLE
+CREATE TABLE IF NOT EXISTS public.faculty (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  role TEXT NOT NULL,
+  experience TEXT,
+  image_url TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 8. TOPPERS TABLE
+CREATE TABLE IF NOT EXISTS public.toppers (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  exam TEXT NOT NULL,
+  score TEXT NOT NULL,
+  year_info TEXT,
+  rank TEXT NOT NULL,
+  image_url TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 9. TESTIMONIALS TABLE
+CREATE TABLE IF NOT EXISTS public.testimonials (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  detail TEXT NOT NULL,
+  text TEXT NOT NULL,
+  avatar_text TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- ============================================================
@@ -61,6 +115,11 @@ ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.courses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.enrollments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.enquiries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.gallery ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.faculty ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.toppers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.testimonials ENABLE ROW LEVEL SECURITY;
 
 -- USERS POLICIES (Fixed: no recursive self-reference)
 DO $$ BEGIN
@@ -103,6 +162,42 @@ DO $$ BEGIN
     
     DROP POLICY IF EXISTS "Admins can view all enrollments" ON public.enrollments;
     CREATE POLICY "Admins can view all enrollments" ON public.enrollments FOR SELECT USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+END $$;
+
+-- ENQUIRIES POLICIES
+DO $$ BEGIN
+    DROP POLICY IF EXISTS "Anyone can insert enquiries" ON public.enquiries;
+    CREATE POLICY "Anyone can insert enquiries" ON public.enquiries FOR INSERT WITH CHECK (true);
+    
+    DROP POLICY IF EXISTS "Admins can view all enquiries" ON public.enquiries;
+    CREATE POLICY "Admins can view all enquiries" ON public.enquiries FOR SELECT USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+END $$;
+
+-- MEDIA/CONTENT POLICIES (Gallery, Faculty, Toppers, Testimonials)
+DO $$ BEGIN
+    -- Gallery
+    DROP POLICY IF EXISTS "Anyone can view gallery" ON public.gallery;
+    CREATE POLICY "Anyone can view gallery" ON public.gallery FOR SELECT TO public USING (true);
+    DROP POLICY IF EXISTS "Admins can manage gallery" ON public.gallery;
+    CREATE POLICY "Admins can manage gallery" ON public.gallery FOR ALL USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+
+    -- Faculty
+    DROP POLICY IF EXISTS "Anyone can view faculty" ON public.faculty;
+    CREATE POLICY "Anyone can view faculty" ON public.faculty FOR SELECT TO public USING (true);
+    DROP POLICY IF EXISTS "Admins can manage faculty" ON public.faculty;
+    CREATE POLICY "Admins can manage faculty" ON public.faculty FOR ALL USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+
+    -- Toppers
+    DROP POLICY IF EXISTS "Anyone can view toppers" ON public.toppers;
+    CREATE POLICY "Anyone can view toppers" ON public.toppers FOR SELECT TO public USING (true);
+    DROP POLICY IF EXISTS "Admins can manage toppers" ON public.toppers;
+    CREATE POLICY "Admins can manage toppers" ON public.toppers FOR ALL USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
+
+    -- Testimonials
+    DROP POLICY IF EXISTS "Anyone can view testimonials" ON public.testimonials;
+    CREATE POLICY "Anyone can view testimonials" ON public.testimonials FOR SELECT TO public USING (true);
+    DROP POLICY IF EXISTS "Admins can manage testimonials" ON public.testimonials;
+    CREATE POLICY "Admins can manage testimonials" ON public.testimonials FOR ALL USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
 END $$;
 
 -- SITE SETTINGS POLICIES
