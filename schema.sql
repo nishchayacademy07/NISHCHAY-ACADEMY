@@ -230,6 +230,9 @@ DO $$ BEGIN
     CREATE POLICY "Admins can update settings" ON public.site_settings FOR ALL USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'));
 END $$;
 
+-- Enable Realtime for enquiries
+ALTER PUBLICATION supabase_realtime ADD TABLE public.enquiries;
+
 -- ============================================================
 -- INITIAL SEED DATA
 -- ============================================================
