@@ -9,6 +9,18 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+    html.light-mode {
+      --dark: #F8FAFC; --dark2: #FFFFFF; --dark3: #F1F5F9; --dark4: #E2E8F0;
+      --text: #334155; --muted: #64748B;
+      --heading-color: #0F172A;
+      --border-dim: rgba(0,0,0,0.08);
+      --border-med: rgba(0,0,0,0.15);
+    }
+    :root {
+      --heading-color: #fff;
+      --border-dim: rgba(255,255,255,0.07);
+      --border-med: rgba(255,255,255,0.15);
+    }
         /* ─── AUTH PAGE STYLES ─────────────────────────── */
         .auth-container {
             min-height: 100vh;
@@ -46,7 +58,7 @@
         .auth-tabs {
             display: flex;
             margin: 0 30px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid var(--border-dim);
         }
         .auth-tab {
             flex: 1;
@@ -79,7 +91,7 @@
         .form-control {
             width: 100%;
             background: var(--dark);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--border-dim);
             color: var(--text);
             padding: 11px 16px;
             border-radius: 10px;
@@ -150,12 +162,25 @@
         .auth-error.visible { display: block; }
     </style>
 </head>
+<script>
+  if (localStorage.getItem('theme') === 'light' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+    document.documentElement.classList.add('light-mode');
+  }
+</script>
 <body>
 
     <div class="auth-container">
         <div class="auth-card">
             <a href="index.html" class="back-to-home"><i class="fa-solid fa-arrow-left"></i></a>
             
+            <!-- Nav (Simple) -->
+<nav style="position:fixed; top:0; left:0; right:0; padding:1.5rem 5%; display:flex; justify-content:space-between; align-items:center; z-index:100;">
+  <a href="index.html" class="nav-logo" style="text-decoration:none; font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900; color:var(--gold);">Nishchay<span style="color:var(--text);"> Academy</span></a>
+  <div style="display:flex; gap:1.5rem; align-items:center;">
+    <button id="themeToggleBtn" style="background:transparent; border:none; color:var(--text); font-size:1.2rem; cursor:pointer;"><i class="fa-solid fa-moon" id="themeIcon"></i></button>
+    <a href="index.html" style="color:var(--muted); text-decoration:none; font-size:0.85rem; font-weight:600;">Back to Home</a>
+  </div>
+</nav>
             <div class="auth-header">
                 <div class="auth-logo"><i class="fa-solid fa-graduation-cap"></i></div>
                 <h2 id="authTitle" style="color: var(--text); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900;">Welcome Back</h2>
@@ -309,6 +334,20 @@
             e.preventDefault();
             alert("Please contact support at support@nishchayacademy.com for password recovery.");
         });
-    </script>
+      const themeToggle = document.getElementById('themeToggleBtn');
+  const themeIcon = document.getElementById('themeIcon');
+  if(themeToggle) {
+    if(document.documentElement.classList.contains('light-mode')) {
+      themeIcon.classList.replace('fa-moon', 'fa-sun');
+    }
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('light-mode');
+      const isLight = document.documentElement.classList.contains('light-mode');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      themeIcon.className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    });
+  }
+
+</script>
 </body>
 </html>
