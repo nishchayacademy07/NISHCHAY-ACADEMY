@@ -612,15 +612,25 @@
   });
 
   // Demo form submit
-  window.submitDemo = function(e) {
+  window.submitDemo = async function(e) {
     e.preventDefault();
     const btn = document.getElementById('demoBtn');
+    const name = document.getElementById('demoName').value;
+    const phone = document.getElementById('demoPhone').value;
+    
     btn.textContent = 'Submitting...';
     btn.disabled = true;
-    setTimeout(() => {
+    
+    try {
+      const { error } = await supabase.from('enquiries').insert({ name, phone });
+      if (error) throw error;
       document.getElementById('demoForm').style.display = 'none';
       document.getElementById('demoSuccess').style.display = 'block';
-    }, 800);
+    } catch (err) {
+      alert('Error submitting request. Please try again.');
+      btn.textContent = 'Schedule Demo →';
+      btn.disabled = false;
+    }
   };
 </script>
 </body>
