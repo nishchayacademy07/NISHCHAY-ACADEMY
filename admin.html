@@ -205,6 +205,12 @@
     <a class="sidebar-link" data-page="add-course">
       <i class="fa-solid fa-circle-plus"></i> Add Course
     </a>
+    <a class="sidebar-link" data-page="toppers">
+      <i class="fa-solid fa-medal"></i> Star Toppers
+    </a>
+    <a class="sidebar-link" data-page="testimonials">
+      <i class="fa-solid fa-comment-dots"></i> Testimonials
+    </a>
     <a class="sidebar-link" data-page="students">
       <i class="fa-solid fa-users"></i> Students
     </a>
@@ -440,6 +446,27 @@
           <label>About Content</label>
           <textarea style="min-height:120px;" id="siteAboutContent" placeholder="Description of the academy..."></textarea>
         </div>
+
+        <div class="card-title" style="margin-top:1.5rem;">Stats / Milestones</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Students Placed</label>
+            <input type="text" id="siteStatStudents" placeholder="e.g. 47K+">
+          </div>
+          <div class="form-group">
+            <label>Success Rate / Rating</label>
+            <input type="text" id="siteStatSuccess" placeholder="e.g. 98.6% or 4.9*">
+          </div>
+          <div class="form-group">
+            <label>Years of Excellence</label>
+            <input type="text" id="siteStatYears" placeholder="e.g. 22 Yrs">
+          </div>
+          <div class="form-group">
+            <label>AIR 1 Holders</label>
+            <input type="text" id="siteStatAir1" placeholder="e.g. 340+">
+          </div>
+        </div>
+
         <div class="card-title" style="margin-top:1rem;">Footer</div>
         <div class="form-group">
           <label>Footer Tagline</label>
@@ -551,6 +578,92 @@
         <div class="card-title">Faculty Members</div>
         <div id="facultyAdminGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; margin-top:0.5rem;">
           <div style="text-align:center; color:var(--muted); padding:2rem; grid-column:1/-1;">Loading faculty...</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ── TOPPERS ── -->
+    <div class="page" id="page-toppers">
+      <div class="page-header">
+        <h1>Star Toppers</h1>
+        <p>Manage the Hall of Fame shown on the homepage.</p>
+      </div>
+      <div class="card" style="max-width:760px;">
+        <div class="card-title">Add / Update Topper</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Student Name *</label>
+            <input type="text" id="topperName" placeholder="E.g. Arjun Mehta">
+          </div>
+          <div class="form-group">
+            <label>Exam *</label>
+            <input type="text" id="topperExam" placeholder="E.g. IIT JEE Advanced 2024">
+          </div>
+          <div class="form-group">
+            <label>Score *</label>
+            <input type="text" id="topperScore" placeholder="E.g. 332 / 360">
+          </div>
+          <div class="form-group">
+            <label>Rank *</label>
+            <input type="text" id="topperRank" placeholder="E.g. AIR 1">
+          </div>
+          <div class="form-group full">
+            <label>Institution / Year Info</label>
+            <input type="text" id="topperYearInfo" placeholder="E.g. IIT Bombay — Computer Science">
+          </div>
+          <div class="form-group full">
+            <label>Topper Photo</label>
+            <div class="upload-zone" id="topperUploadZone">
+              <input type="file" accept="image/*" id="topperPhotoInput">
+              <i class="fa-solid fa-medal" style="font-size:1.6rem; color:var(--gold);"></i>
+              <span id="topperUploadText">Click to upload topper photo</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="saveTopperBtn" style="width:100%; margin-top:0.5rem;"><i class="fa-solid fa-floppy-disk"></i> Save Topper</button>
+      </div>
+      <div class="card" style="margin-top:1.5rem;">
+        <div class="card-title">Our Toppers</div>
+        <div id="toppersAdminGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; margin-top:0.5rem;">
+          <div style="text-align:center; color:var(--muted); padding:2rem; grid-column:1/-1;">Loading toppers...</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ── TESTIMONIALS ── -->
+    <div class="page" id="page-testimonials">
+      <div class="page-header">
+        <h1>Testimonials</h1>
+        <p>Manage student reviews and testimonials.</p>
+      </div>
+      <div class="card" style="max-width:760px;">
+        <div class="card-title">Add / Update Testimonial</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Student Name *</label>
+            <input type="text" id="testiName" placeholder="E.g. Priya Sharma">
+          </div>
+          <div class="form-group">
+            <label>Avatar Text (1 Letter)</label>
+            <input type="text" id="testiAvatar" placeholder="E.g. P" maxlength="1">
+          </div>
+          <div class="form-group full">
+            <label>Student Details *</label>
+            <input type="text" id="testiDetail" placeholder="E.g. IAS 2023 · AIR 3 · Maharashtra Cadre">
+          </div>
+          <div class="form-group full">
+            <label>Review Text *</label>
+            <textarea id="testiText" placeholder="Write their review here..." style="min-height: 80px;"></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="saveTestiBtn" style="width:100%; margin-top:0.5rem;"><i class="fa-solid fa-floppy-disk"></i> Save Testimonial</button>
+      </div>
+      <div class="card" style="margin-top:1.5rem;">
+        <div class="card-title">All Testimonials</div>
+        <div id="testiAdminGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1rem; margin-top:0.5rem;">
+          <div style="text-align:center; color:var(--muted); padding:2rem; grid-column:1/-1;">Loading testimonials...</div>
         </div>
       </div>
     </div>
