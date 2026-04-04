@@ -37,6 +37,8 @@ async function initAdmin() {
   loadEnquiries();
   loadGallery();
   loadFaculty();
+  loadToppers();
+  loadTestimonials();
 }
 
 // ── NAVIGATION ─────────────────────────────────────────────
@@ -246,6 +248,12 @@ async function loadSettings() {
   $('siteAboutContent').value = data.about_content || '';
   $('siteFooterText').value = data.footer_text || '';
 
+  // Stats
+  if ($('siteStatStudents')) $('siteStatStudents').value = data.stat_students || '47K+';
+  if ($('siteStatSuccess')) $('siteStatSuccess').value = data.stat_success || '98.6%';
+  if ($('siteStatYears')) $('siteStatYears').value = data.stat_years || '22 Yrs';
+  if ($('siteStatAir1')) $('siteStatAir1').value = data.stat_air1 || '340+';
+
   // Contact
   $('siteWhatsapp').value = data.whatsapp_number || '';
   $('siteContactEmail').value = data.contact_email || '';
@@ -300,6 +308,12 @@ $('saveHomepageBtn').addEventListener('click', async () => {
     about_content: $('siteAboutContent').value,
     footer_text: $('siteFooterText').value,
   };
+  
+  if ($('siteStatStudents')) updates.stat_students = $('siteStatStudents').value;
+  if ($('siteStatSuccess')) updates.stat_success = $('siteStatSuccess').value;
+  if ($('siteStatYears')) updates.stat_years = $('siteStatYears').value;
+  if ($('siteStatAir1')) updates.stat_air1 = $('siteStatAir1').value;
+
   const { error } = await supabase.from('site_settings').update(updates).eq('id', 1);
   if (error) { toast('Save failed.', 'error'); return; }
   toast('Homepage content saved!', 'success');
@@ -373,13 +387,19 @@ $('galleryPhotoInput').addEventListener('change', async (e) => {
   for(let file of files) {
     const ext = file.name.split('.').pop();
     const path = `gallery/photo_${Date.now()}_${Math.random().toString(36).substring(7)}.${ext}`;
-    const { error } = await supabase.storage.from('public').upload(path, file);
+    const { error } = await supabase.storage.from('public').upload(path, file, { upsert: true });
     if (!error) {
       const { data: urlData } = supabase.storage.from('public').getPublicUrl(path);
       galleryUploads.push(urlData.publicUrl);
+    } else {
+      toast('Gallery upload error: ' + error.message, 'error');
     }
   }
-  $('galleryUploadText').textContent = `✓ ${galleryUploads.length} photo(s) ready for upload.`;
+  if (galleryUploads.length > 0) {
+    $('galleryUploadText').textContent = `✓ ${galleryUploads.length} photo(s) ready for upload.`;
+  } else {
+    $('galleryUploadText').textContent = 'Click to try again.';
+  }
 });
 
 $('uploadGalleryBtn').addEventListener('click', async () => {
@@ -432,11 +452,14 @@ $('facultyPhotoInput').addEventListener('change', async (e) => {
   $('facultyUploadText').textContent = 'Uploading...';
   const ext = file.name.split('.').pop();
   const path = `faculty/prof_${Date.now()}.${ext}`;
-  const { error } = await supabase.storage.from('public').upload(path, file);
+  const { error } = await supabase.storage.from('public').upload(path, file, { upsert: true });
   if (!error) {
     const { data: urlData } = supabase.storage.from('public').getPublicUrl(path);
     facultyPhotoUrl = urlData.publicUrl;
     $('facultyUploadText').textContent = `✓ Photo uploaded!`;
+  } else {
+    $('facultyUploadText').textContent = 'Click to retry upload';
+    toast('Upload failed: ' + error.message, 'error');
   }
 });
 
@@ -462,4 +485,119 @@ $('saveFacultyBtn').addEventListener('click', async () => {
   
   loadFaculty();
   toast('Faculty member added!', 'success');
+});
+
+// ── TOPPERS ────────────────────────────────────────────────
+async function loadToppers() {
+  const grid = $('toppersAdminGrid');
+  const { data, error } = await supabase.from('toppers').select('*').order('created_at', { ascending: false });
+  if (error || !data || data.length === 0) { 
+    grid.innerHTML = `<div style="text-align:center; color:var(--muted); grid-column:1/-1;">No toppers added yet.</div>`; 
+    return; 
+  }
+  grid.innerHTML = data.map(t => `
+    <div class="card" style="padding:1rem; text-align:center;">
+      ${t.image_url ? `<img src="${t.image_url}" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:0.8rem;">` : `<div style="width:70px; height:70px; border-radius:50%; background:var(--dark4); margin:0 auto 0.8rem; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-medal"></i></div>`}
+      <div style="font-weight:700; font-size:0.95rem;">${t.name}</div>
+      <div style="font-size:0.8rem; color:var(--gold); margin-top:0.2rem;">${t.rank}</div>
+      <div style="font-size:0.75rem; color:var(--muted); margin-top:0.3rem;">${t.exam}</div>
+      <button class="btn btn-danger btn-sm" style="width:100%; margin-top:0.8rem;" onclick="deleteTopper('${t.id}')"><i class="fa-solid fa-trash"></i></button>
+    </div>
+  `).join('');
+}
+
+window.deleteTopper = async (id) => {
+  if(!confirm('Remove this topper?')) return;
+  await supabase.from('toppers').delete().eq('id', id);
+  loadToppers();
+  toast('Topper removed', 'success');
+};
+
+let topperPhotoUrl = '';
+$('topperPhotoInput').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  $('topperUploadText').textContent = 'Uploading...';
+  const ext = file.name.split('.').pop();
+  const path = `toppers/topper_${Date.now()}.${ext}`;
+  const { error } = await supabase.storage.from('public').upload(path, file, { upsert: true });
+  if (!error) {
+    const { data: urlData } = supabase.storage.from('public').getPublicUrl(path);
+    topperPhotoUrl = urlData.publicUrl;
+    $('topperUploadText').textContent = `✓ Photo uploaded!`;
+  } else {
+    $('topperUploadText').textContent = 'Upload failed, click to retry';
+    toast('Upload failed: ' + error.message, 'error');
+  }
+});
+
+$('saveTopperBtn').addEventListener('click', async () => {
+  const name = $('topperName').value;
+  const exam = $('topperExam').value;
+  const score = $('topperScore').value;
+  const rank = $('topperRank').value;
+  const year_info = $('topperYearInfo').value;
+  
+  if(!name || !exam || !score || !rank) return toast('Please fill all required fields', 'error');
+  
+  const { error } = await supabase.from('toppers').insert({
+    name, exam, score, rank, year_info, image_url: topperPhotoUrl
+  });
+  
+  if(error) return toast('Failed to add topper', 'error');
+  
+  ['topperName','topperExam','topperScore','topperRank','topperYearInfo','topperPhotoInput'].forEach(id => $(id).value = '');
+  topperPhotoUrl = '';
+  $('topperUploadText').textContent = 'Click to upload topper photo';
+  
+  loadToppers();
+  toast('Topper successfully added!', 'success');
+});
+
+// ── TESTIMONIALS ──────────────────────────────────────────
+async function loadTestimonials() {
+  const grid = $('testiAdminGrid');
+  const { data, error } = await supabase.from('testimonials').select('*').order('created_at', { ascending: false });
+  if (error || !data || data.length === 0) { 
+    grid.innerHTML = `<div style="text-align:center; color:var(--muted); grid-column:1/-1;">No testimonials added yet.</div>`; 
+    return; 
+  }
+  grid.innerHTML = data.map(t => `
+    <div class="card" style="padding:1.2rem;">
+      <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.8rem;">
+        <div style="width:40px; height:40px; border-radius:50%; background:var(--gold); color:var(--dark); display:flex; align-items:center; justify-content:center; font-weight:700;">${t.avatar_text || 'S'}</div>
+        <div>
+          <div style="font-weight:700;">${t.name}</div>
+          <div style="font-size:0.75rem; color:var(--muted);">${t.detail}</div>
+        </div>
+      </div>
+      <p style="font-size:0.85rem; color:var(--muted); line-height:1.4;">"${t.text}"</p>
+      <button class="btn btn-danger btn-sm" style="width:100%; margin-top:0.8rem;" onclick="deleteTestimonial('${t.id}')"><i class="fa-solid fa-trash"></i></button>
+    </div>
+  `).join('');
+}
+
+window.deleteTestimonial = async (id) => {
+  if(!confirm('Remove this testimonial?')) return;
+  await supabase.from('testimonials').delete().eq('id', id);
+  loadTestimonials();
+  toast('Testimonial removed', 'success');
+};
+
+$('saveTestiBtn').addEventListener('click', async () => {
+  const name = $('testiName').value;
+  const avatar_text = $('testiAvatar').value || name.charAt(0).toUpperCase();
+  const detail = $('testiDetail').value;
+  const text = $('testiText').value;
+  
+  if(!name || !detail || !text) return toast('Please fill all required fields', 'error');
+  
+  const { error } = await supabase.from('testimonials').insert({ name, avatar_text, detail, text });
+  
+  if(error) return toast('Failed to add testimonial', 'error');
+  
+  ['testiName','testiAvatar','testiDetail','testiText'].forEach(id => $(id).value = '');
+  
+  loadTestimonials();
+  toast('Testimonial added successfully!', 'success');
 });
