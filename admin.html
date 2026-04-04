@@ -208,6 +208,17 @@
     <a class="sidebar-link" data-page="students">
       <i class="fa-solid fa-users"></i> Students
     </a>
+    <a class="sidebar-link" data-page="enquiries">
+      <i class="fa-solid fa-envelope-open-text"></i> Enquiries
+    </a>
+
+    <div class="sidebar-section-label">Media</div>
+    <a class="sidebar-link" data-page="gallery">
+      <i class="fa-solid fa-images"></i> Gallery Photos
+    </a>
+    <a class="sidebar-link" data-page="faculty-photos">
+      <i class="fa-solid fa-chalkboard-teacher"></i> Faculty Photos
+    </a>
 
     <div class="sidebar-section-label">Customization</div>
     <a class="sidebar-link" data-page="branding">
@@ -455,6 +466,92 @@
           <input type="email" id="siteContactEmail" placeholder="hello@nishchayacademy.com">
         </div>
         <button class="btn btn-primary" id="saveContactBtn" style="width:100%;"><i class="fa-solid fa-floppy-disk"></i> Save Contact Info</button>
+      </div>
+    </div>
+
+    <!-- ── ENQUIRIES ── -->
+    <div class="page" id="page-enquiries">
+      <div class="page-header">
+        <h1>Student Enquiries</h1>
+        <p>All enquiries submitted through the Schedule Demo form on the homepage.</p>
+      </div>
+      <div class="card" style="padding:0;">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Phone</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody id="enquiriesTableBody"><tr><td colspan="4" style="text-align:center; color:var(--muted); padding:2rem;">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GALLERY PHOTOS ── -->
+    <div class="page" id="page-gallery">
+      <div class="page-header">
+        <h1>Gallery Photos</h1>
+        <p>Upload photos to display in the academy gallery section on the homepage.</p>
+      </div>
+      <div class="card" style="max-width:760px;">
+        <div class="card-title">Upload New Photo</div>
+        <div class="form-group">
+          <label>Photo</label>
+          <div class="upload-zone" id="galleryUploadZone">
+            <input type="file" accept="image/*" id="galleryPhotoInput" multiple>
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <span id="galleryUploadText">Click or drag photos here (multiple allowed)</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Caption (optional)</label>
+          <input type="text" id="galleryCaption" placeholder="E.g. Annual Prize Distribution 2024">
+        </div>
+        <button class="btn btn-primary" id="uploadGalleryBtn" style="width:100%;"><i class="fa-solid fa-upload"></i> Upload Photo(s)</button>
+      </div>
+      <div class="card" style="margin-top:1.5rem;">
+        <div class="card-title">Uploaded Photos</div>
+        <div id="galleryGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:1rem; margin-top:0.5rem;">
+          <div style="text-align:center; color:var(--muted); padding:2rem; grid-column:1/-1;">Loading gallery...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FACULTY PHOTOS ── -->
+    <div class="page" id="page-faculty-photos">
+      <div class="page-header">
+        <h1>Faculty Photos</h1>
+        <p>Upload and manage faculty member photos shown in the Faculty section.</p>
+      </div>
+      <div class="card" style="max-width:760px;">
+        <div class="card-title">Add / Update Faculty Photo</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Faculty Name *</label>
+            <input type="text" id="facultyName" placeholder="E.g. Prof. V. Rao">
+          </div>
+          <div class="form-group">
+            <label>Subject / Role *</label>
+            <input type="text" id="facultyRole" placeholder="E.g. Physics — JEE">
+          </div>
+          <div class="form-group">
+            <label>Experience</label>
+            <input type="text" id="facultyExp" placeholder="E.g. IIT Madras · 18 yrs exp">
+          </div>
+          <div class="form-group">
+            <label>Photo</label>
+            <div class="upload-zone" id="facultyUploadZone">
+              <input type="file" accept="image/*" id="facultyPhotoInput">
+              <i class="fa-solid fa-user-circle" style="font-size:1.6rem; color:var(--gold);"></i>
+              <span id="facultyUploadText">Click to upload faculty photo</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="saveFacultyBtn" style="width:100%; margin-top:0.5rem;"><i class="fa-solid fa-floppy-disk"></i> Save Faculty Member</button>
+      </div>
+      <div class="card" style="margin-top:1.5rem;">
+        <div class="card-title">Faculty Members</div>
+        <div id="facultyAdminGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; margin-top:0.5rem;">
+          <div style="text-align:center; color:var(--muted); padding:2rem; grid-column:1/-1;">Loading faculty...</div>
+        </div>
       </div>
     </div>
 
