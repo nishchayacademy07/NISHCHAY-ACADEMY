@@ -75,6 +75,32 @@ function setupLogout() {
   });
 }
 
+// ── REALTIME NOTIFICATIONS ─────────────────────────────────
+function setupRealtimeNotifications() {
+  if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+    Notification.requestPermission();
+  }
+
+  supabase
+    .channel('enquiries-realtime')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'enquiries' }, payload => {
+      const newEnq = payload.new;
+      
+      // Show Device Push Notification
+      if (Notification.permission === "granted") {
+        new Notification("🎓 New Course Inquiry!", {
+          body: `${newEnq.name} wants a free demo.\nPhone: ${newEnq.phone}`,
+          icon: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+        });
+      }
+      
+      // Show in-app Toast & update list
+      toast(`New Inquiry from ${newEnq.name}!`, 'success');
+      loadEnquiries(); 
+    })
+    .subscribe();
+}
+
 // ── STATS ──────────────────────────────────────────────────
 async function loadStats() {
   const [courses, students, enrollments] = await Promise.all([
@@ -332,6 +358,7 @@ $('saveContactBtn').addEventListener('click', async () => {
 
 // INIT
 initAdmin();
+setupRealtimeNotifications();
 
 // ── ENQUIRIES ──────────────────────────────────────────────
 async function loadEnquiries() {
